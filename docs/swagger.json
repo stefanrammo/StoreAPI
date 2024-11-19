@@ -1,7 +1,33 @@
 {
-    "openapi": "3.0.2",
-    "info": {
-        "title": "SalaviinApi",
-        "version": "1.0.0"
+    "get": {
+        "tags": [
+            "Drinks"
+        ],
+        "responses": {
+            "200": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "examples": {
+                            "List of drinks": {
+                                "value": [
+                                    "Laua Viin",
+                                    "Viru Valge",
+                                    "Valge Viin"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "description": "Returns a list of drinks"
+            }
+        },
+        "summary": "get list of all drinks from api",
+        "description": "Returns a list of all drinks in the API to the requesting user"
     }
 }
