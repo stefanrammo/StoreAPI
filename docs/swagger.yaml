@@ -1,0 +1,89 @@
+openapi: 3.0.2
+info:
+    title: SalaviinApi
+    version: 1.0.0
+paths:
+    /drinks:
+        get:
+            tags:
+                - drinks
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                List of drinks:
+                                    value:
+                                        - Laua Viin
+                                        - Viru Valge
+                                        - Valge Viin
+                    description: Returns a list of drinks
+            summary: get list of all drinks from api
+            description: Returns a list of all drinks in the API to the requesting user
+    '/drinks/{id}':
+        get:
+            tags:
+                - drinks
+            parameters:
+                -
+                    examples:
+                        Example of id of drink:
+                            value:
+                                - 1
+                    name: id
+                    description: id of drink the user has requested
+                    schema:
+                        type: integer
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Example of a drink with details:
+                                    value:
+                                        id: 1
+                                        name: Laua Viin
+                                        price: 2
+                                        description: ''
+                    description: Returns details of a drink to the user
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: ''
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Drink /w+ was not found:
+                                    value:
+                                        -
+                                            error: Drink \w+ was not found in drink array
+                    description: Returns 404 to the user if drink with this id is not found
+            operationId: id
+            summary: Get full details of the drink
+            description: Return full details of the given id of drinks
+components:
+    schemas:
+        Error:
+            title: Root Type for Error
+            description: ''
+            type: object
+            properties:
+                error:
+                    type: string
+            example:
+                error: Drink not found
