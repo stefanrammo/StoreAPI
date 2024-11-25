@@ -24,6 +24,51 @@ paths:
                     description: Returns a list of drinks
             summary: get list of all drinks from api
             description: Returns a list of all drinks in the API to the requesting user
+        post:
+            requestBody:
+                description: Data of drink that the user wants to add
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Drink'
+                        examples:
+                            Example of a submittable drink:
+                                value:
+                                    name: Laudur
+                                    price: '0'
+                                    description: Parim viin
+                required: true
+            tags:
+                - drinks
+            responses:
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Drink that is created:
+                                    value:
+                                        id: 4
+                                        name: Laudur
+                                        price: '0'
+                                        description: Parim viin
+                    description: Return 201 to user if creation of new drink was successful
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Missing params:
+                                    value:
+                                        -
+                                            error: One or multiple param(s) missing
+                    description: Return 400 to the user if one or multiple param(s) are missing
+            summary: add new drink
+            description: Adds a new drink into the array
     '/drinks/{id}':
         get:
             tags:
@@ -61,7 +106,11 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Error'
-                    description: ''
+                            examples:
+                                Invalid drink id:
+                                    value:
+                                        error: Invalid id inserted
+                    description: Returns 400 to the user if an invalid id was entered
                 '404':
                     content:
                         application/json:
@@ -87,3 +136,18 @@ components:
                     type: string
             example:
                 error: Drink not found
+        Drink:
+            title: Root Type for Drink
+            description: Example of a submittable drink
+            type: object
+            properties:
+                name:
+                    type: string
+                price:
+                    type: string
+                description:
+                    type: string
+            example:
+                name: Laudur
+                price: '0'
+                description: Parim viin
