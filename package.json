@@ -19,6 +19,7 @@
   "homepage": "https://github.com/stefanrammo/StoreAPI#readme",
   "dependencies": {
     "express": "^4.21.1",
+    "nodemon": "^3.1.7",
     "swagger-ui-express": "^5.0.1"
   }
 }

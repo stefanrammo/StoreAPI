@@ -5,14 +5,17 @@ const swaggerDoc = require('./docs/swagger.json');
 
 app.use("Idocs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
-app.get('/drinks', (req, res) => { res.send ([
-    // { id: 1, expiration_date: 'Laua Viin', price: 2, description: '' },
-    // { id: 2, expiration_date: 'Põhja Viin', price: 1.5, description: '' },
-    // { id: 3, expiration_date: 'Võõra Viin', price: 3, description: '' },
-["Laua Viin", "Viru Valge", "Valge Viin"]
-    // Add more drinks here...
- 
-]) });
+const drinks = [{ id: 1, name: 'Laua Viin', expiration_date: null, price: 2, description: '' },
+    { id: 2, name: 'Põhja Viin', expiration_date: null, price: 1.5, description: '' },
+    { id: 3, name: 'Võõra Viin', expiration_date: null, price: 3, description: '' },
+];
+
+app.get('/drinks', (req, res) => { res.send
+(drinks)    // Add more drinks here...
+});
+
+app.get('/drinks/:id', (req, res) => {
+    res.send(drinks[req.params.id - 1])});
 
 app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)});
