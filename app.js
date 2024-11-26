@@ -44,20 +44,33 @@ app.get('/drinks/:id', (req, res) => {
 });
 
 app.post('/drinks', (req, res) => {
-    if (req.body.name == null || req.body.price == null || req.body.description == null) {
-        return res.status(400).send({ error: 'Missing required fields' })
-    };
+    const { name, price, description } = req.body;
+
+    // Check if all required fields are present
+    if (!name || !price || !description) {
+        return res.status(400).send({ error: 'Missing required fields' });
+    }
+
+    // Check if a drink with the same name already exists
+    const existingDrink = drinks.find((drink) => drink.name.toLowerCase() === name.toLowerCase());
+    if (existingDrink) {
+        return res.status(409).send({ error: 'Drink with the same name already exists' });
+    }
+
+    // Add the new drink
     const newDrink = {
         id: drinks.length + 1,
         order_id: null,
-        name: req.body.name,
+        name,
         expiration_date: null,
-        price: req.body.price,
-        description: req.body.description
+        price,
+        description,
     };
     drinks.push(newDrink);
-    res.status(201).location(`${getBaseURL(req)}/games/$(games.length)`).send(newDrink);
+
+    res.status(201).location(`${getBaseURL(req)}/drinks/${newDrink.id}`).send(newDrink);
 });
+
 
 app.delete('/drinks/:id', (req, res) => {
     if (typeof drinks[req.params.id - 1] === 'undefined') {
