@@ -125,6 +125,111 @@ paths:
             operationId: id
             summary: Get full details of the drink
             description: Return full details of the given id of drinks
+        put:
+            requestBody:
+                description: Properties of drink to be changed
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Drink'
+                        examples:
+                            Example of drink properties to be changed in UPDATE:
+                                value:
+                                    name: lautaviina
+                                    price: 23
+                                    description: hyvä
+                required: true
+            tags:
+                - drinks
+            parameters:
+                -
+                    examples:
+                        Example of id of drink:
+                            value: '1'
+                    name: id
+                    description: Id of drink to be updated
+                    schema:
+                        type: integer
+                    in: path
+                    required: true
+            responses:
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Example of a changed Drink:
+                                    value:
+                                        id: 1
+                                        order_id: 1
+                                        name: lautaviina
+                                        price: 23
+                                        description: hyvä
+                    description: Returns the modified Drink to the user
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Example of invalid params:
+                                    value: '{ error: ''Invalid drink ID'' }'
+                    description: User has not added required params to the modified Drink
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Example of Drink not found:
+                                    value: '{ error: ''Drink not found'' }'
+                    description: User did not provide an id
+            operationId: id
+            summary: Update a Drink
+            description: Returns an updated drink when modification of the drink is successful
+        delete:
+            tags:
+                - drinks
+            parameters:
+                -
+                    examples:
+                        Example of id of drink:
+                            value: '1'
+                    name: id
+                    description: Id of drink
+                    schema:
+                        type: integer
+                    in: path
+                    required: true
+            responses:
+                '204':
+                    description: Returns 204 if drink is successfully deleted
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Invalid drink id:
+                                    value:
+                                        error: Invalid drink ID
+                    description: Invalid drink ID
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Drink not found:
+                                    value:
+                                        error: Drink not found
+                    description: 'Drink is not found, undefined id'
+            operationId: id
+            summary: Delete a Drink
+            description: Deletes a given id drink
 components:
     schemas:
         Error:
@@ -138,16 +243,25 @@ components:
                 error: Drink not found
         Drink:
             title: Root Type for Drink
-            description: Example of a submittable drink
+            description: Properties of a Drink
             type: object
             properties:
+                id:
+                    format: int32
+                    type: integer
+                order_id:
+                    type: string
                 name:
                     type: string
-                price:
+                expiration_date:
                     type: string
+                price:
+                    format: double
+                    type: number
                 description:
                     type: string
             example:
-                name: Laudur
-                price: '0'
-                description: Parim viin
+                id: 2
+                name: Põhja Viin
+                price: 1.5
+                description: ''
