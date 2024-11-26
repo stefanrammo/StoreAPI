@@ -14,23 +14,23 @@ const drinks = [{ id: 1, order_id: 1, name: 'Laua Viin', expiration_date: null, 
 ];
 
 const customers = [{ id: 1, name: 'Alice', email: 'alice@example.com', age: '18' },
-    { id: 2, name: 'Bob', email: 'bob@example.com', age: '22' },
-    { id: 3, name: 'Charlie', email: 'charlie@example.com', age: '19' }
+{ id: 2, name: 'Bob', email: 'bob@example.com', age: '22' },
+{ id: 3, name: 'Charlie', email: 'charlie@example.com', age: '19' }
 ];
 
-const order = [{ customers_id: 1, order_date: "01.01.2024"},
-    { customers_id: 2, order_date: "02.02.2024"},
-    { customers_id: 3, order_date: "03.03.2024"}
+const order = [{ customers_id: 1, order_date: "01.01.2024" },
+{ customers_id: 2, order_date: "02.02.2024" },
+{ customers_id: 3, order_date: "03.03.2024" }
 ];
 
-const comments = [{ customers_id: 1, drink_id: 1, comment: 'Tänan viinilt!', review_score: 5},
-    { customers_id: 2, drink_id: 2, comment: 'Kõik päris!', review_score: 4},
-    { customers_id: 3, drink_id: 3, comment: 'Mõtetu viin!', review_score: 3}
+const comments = [{ customers_id: 1, drink_id: 1, comment: 'Tänan viinilt!', review_score: 5 },
+{ customers_id: 2, drink_id: 2, comment: 'Kõik päris!', review_score: 4 },
+{ customers_id: 3, drink_id: 3, comment: 'Mõtetu viin!', review_score: 3 }
 ];
 
 app.get('/drinks', (req, res) => {
     res.send
-    (drinks)    // Add more drinks here...
+        (drinks)    // Add more drinks here...
 });
 
 app.get('/drinks/:id', (req, res) => {
@@ -67,28 +67,40 @@ app.delete('/drinks/:id', (req, res) => {
         return res.status(400).send({ error: 'Invalid drink ID' })
     };
     drinks.splice(req.params.id - 1, 1);
-    return res.status(204).send(drinks[req.params.id - 1])});
+    return res.status(204).send(drinks[req.params.id - 1])
+});
 
-/* app.patch('/drinks/:id', (req, res) => {
-    if (typeof drinks[req.params.id - 1] === 'undefined') {
-        res.status(404).send({ error: 'Drink not found' })
-    };
-    if (req.params.id == null) {
-        return res.status(400).send({ error: 'Invalid drink ID' })
-    };
-    if (req.body.name == null || req.body.price == null || req.body.description == null) {
-        return res.status(400).send({ error: 'Missing required fields' })
-    };
-    drinks[req.params.id - 1].name = req.body.name;
-    drinks[req.params.id - 1].price = req.body.price;
-    drinks[req.params.id - 1].description = req.body.description});
- */
+app.put('/drinks/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const drink = drinks.find((d) => d.id === id);
+
+    if (!drink) {
+        return res.status(404).send({ error: 'Drink not found' });
+    }
+
+    const { name, price, description, expiration_date, order_id } = req.body;
+
+    if (!name || !price || !description) {
+        return res.status(400).send({ error: 'Missing required fields' });
+    }
+
+    // Update the drink object
+    drink.name = name;
+    drink.price = price;
+    drink.description = description;
+
+    // Optional fields
+    if (expiration_date !== undefined) drink.expiration_date = expiration_date;
+    if (order_id !== undefined) drink.order_id = order_id;
+
+    res.status(200).send(drink);
+});
 
 app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)
 });
 
 function getBaseURL(req) {
-    return req.connection && req.connection.encrypted? 
-    "https" : "http" + `://${req.headers.host}`;
+    return req.connection && req.connection.encrypted ?
+        "https" : "http" + `://${req.headers.host}`;
 }
