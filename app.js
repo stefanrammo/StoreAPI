@@ -107,6 +107,16 @@ app.get('/customers', (req, res) => {
         (customers)    // Add more customers here...
 });
 
+app.get('/customers/:id', (req, res) => {
+    if (typeof customers[req.params.id - 1] === 'undefined') {
+        res.status(404).send({ error: 'Customer not found' })
+    };
+    if (req.params.id == null) {
+        return res.status(400).send({ error: 'Invalid customer ID' })
+    };
+    res.send(customers[req.params.id - 1])
+});
+
 app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)
 });

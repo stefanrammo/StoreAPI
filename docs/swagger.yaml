@@ -251,6 +251,64 @@ paths:
                     description: returns a list of customers
             summary: get list of all customers from api
             description: Returns a list of all customers in the API to the requesting user
+    '/customers/{id}':
+        get:
+            tags:
+                - customers
+            parameters:
+                -
+                    examples:
+                        Example of id of customer:
+                            value:
+                                - 1
+                    name: id
+                    description: id of customer the user has requested
+                    schema:
+                        type: integer
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Example of customer with id:
+                                    value: |-
+                                        { 
+                                            "id": 1, 
+                                            "name": 'Alice', 
+                                            "email": 'alice@example.com', 
+                                            "age": '18' 
+                                        }
+                    description: Returns details of a customer to the user
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Invalid customer id:
+                                    value:
+                                        error: Invalid id inserted
+                    description: Returns 400 to the user if an invalid id was entered
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Customer /w+ was not found:
+                                    value:
+                                        -
+                                            error: Customer \w+ was not found in customer array
+                    description: Returns 404 to the user if customer with this id is not found
+            operationId: id
+            summary: Get full details of the customer
+            description: Return full details of the given id of customer
 components:
     schemas:
         Error:
@@ -286,3 +344,28 @@ components:
                 name: Põhja Viin
                 price: 1.5
                 description: ''
+        Customer:
+            description: Properties of a Customer
+            type: object
+            properties:
+                id:
+                    format: int32
+                    description: ''
+                    type: integer
+                name:
+                    description: ''
+                    type: string
+                email:
+                    description: ''
+                    type: string
+                age:
+                    format: int32
+                    description: ''
+                    type: integer
+            example: |-
+                { 
+                    "id": 1,
+                    "name": 'Alice', 
+                    "email": 'alice@example.com', 
+                    "age": '18' 
+                }
