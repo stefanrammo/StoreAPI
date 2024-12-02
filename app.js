@@ -117,6 +117,32 @@ app.get('/customers/:id', (req, res) => {
     res.send(customers[req.params.id - 1])
 });
 
+app.post('/customers', (req, res) => {
+    const { name, email, age } = req.body;
+
+    // Check if all required fields are present
+    if (!name || !email || !age) {
+        return res.status(400).send({ error: 'Missing required fields' });
+    }
+
+    // Check if a customer with the same name already exists
+    const existingCustomer = customers.find((customer) => customer.name.toLowerCase() === name.toLowerCase());
+    if (existingCustomer) {
+        return res.status(409).send({ error: 'Customer with the same name already exists' });
+    }
+
+    // Add the new customer
+    const newCustomer = {
+        id: customers.length + 1,
+        name,
+        email,
+        age,
+    };
+    drinks.push(newCustomer);
+
+    res.status(201).location(`${getBaseURL(req)}/customers/${newCustomer.id}`).send(newCustomer);
+});
+
 app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)
 });

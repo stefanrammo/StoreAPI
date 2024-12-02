@@ -251,6 +251,51 @@ paths:
                     description: returns a list of customers
             summary: get list of all customers from api
             description: Returns a list of all customers in the API to the requesting user
+        post:
+            requestBody:
+                description: Data of customer that the user wants to add
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Customer'
+                        examples:
+                            Example of a submittable data:
+                                value:
+                                    name: Alice
+                                    email: alice@example.com
+                                    age: '18'
+                required: true
+            tags:
+                - customers
+            responses:
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Customer that is created:
+                                    value:
+                                        id: 4
+                                        name: Alice
+                                        email: alice@example.com
+                                        age: '18'
+                    description: Return 201 to user if creation of new customer was successful
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Missing params:
+                                    value:
+                                        -
+                                            error: One or multiple param(s) missing
+                    description: Return 400 to the user if one or multiple param(s) are missing
+            summary: add new customer
+            description: Adds a new customer into the array
     '/customers/{id}':
         get:
             tags:
