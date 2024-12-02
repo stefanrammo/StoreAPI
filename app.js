@@ -76,9 +76,6 @@ app.delete('/drinks/:id', (req, res) => {
     if (typeof drinks[req.params.id - 1] === 'undefined') {
         res.status(404).send({ error: 'Drink not found' })
     };
-    if (req.params.id == null) {
-        return res.status(400).send({ error: 'Invalid drink ID' })
-    };
     drinks.splice(req.params.id - 1, 1);
     return res.status(204).send(drinks[req.params.id - 1])
 });
@@ -93,10 +90,6 @@ app.put('/drinks/:id', (req, res) => {
 
     const { name, price, description, expiration_date, order_id } = req.body;
 
-    if (!name || !price || !description) {
-        return res.status(400).send({ error: 'Missing required fields' });
-    }
-
     // Update the drink object
     drink.name = name;
     drink.price = price;
@@ -107,6 +100,11 @@ app.put('/drinks/:id', (req, res) => {
     if (order_id !== undefined) drink.order_id = order_id;
 
     res.status(200).send(drink);
+});
+
+app.get('/customers', (req, res) => {
+    res.send
+        (customers)    // Add more customers here...
 });
 
 app.listen(port, () => {

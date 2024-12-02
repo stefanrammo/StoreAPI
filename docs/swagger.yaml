@@ -191,6 +191,16 @@ paths:
             summary: Update a Drink
             description: Returns an updated drink when modification of the drink is successful
         delete:
+            requestBody:
+                description: Id of drink that is to be deleted.
+                content:
+                    application/json:
+                        schema:
+                            type: integer
+                        examples:
+                            Id of drink:
+                                value: '1'
+                required: true
             tags:
                 - drinks
             parameters:
@@ -207,16 +217,6 @@ paths:
             responses:
                 '204':
                     description: Returns 204 if drink is successfully deleted
-                '400':
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Error'
-                            examples:
-                                Invalid drink id:
-                                    value:
-                                        error: Invalid drink ID
-                    description: Invalid drink ID
                 '404':
                     content:
                         application/json:
@@ -230,6 +230,27 @@ paths:
             operationId: id
             summary: Delete a Drink
             description: Deletes a given id drink
+    /customers:
+        get:
+            tags:
+                - customers
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                List of customers:
+                                    value:
+                                        - Alice
+                                        - Bob
+                                        - Charlie
+                    description: returns a list of customers
+            summary: get list of all customers from api
+            description: Returns a list of all customers in the API to the requesting user
 components:
     schemas:
         Error:
