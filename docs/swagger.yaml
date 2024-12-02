@@ -294,6 +294,17 @@ paths:
                                         -
                                             error: One or multiple param(s) missing
                     description: Return 400 to the user if one or multiple param(s) are missing
+                '409':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Customer already exists:
+                                    value:
+                                        -
+                                            error: Customer with given data already exists
+                    description: Return 409 to the user if customer already exists
             summary: add new customer
             description: Adds a new customer into the array
     '/customers/{id}':
@@ -354,6 +365,71 @@ paths:
             operationId: id
             summary: Get full details of the customer
             description: Return full details of the given id of customer
+        put:
+            requestBody:
+                description: Properties of customer to be changed
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Customer'
+                        examples:
+                            Example of customer properties:
+                                value:
+                                    id: 1
+                                    name: Alice
+                                    email: alice@example.com
+                                    age: '18'
+                required: true
+            tags:
+                - customers
+            parameters:
+                -
+                    examples:
+                        Example of id of customer:
+                            value: '1'
+                    name: id
+                    description: Id of customer to be updated
+                    schema:
+                        type: integer
+                    in: path
+                    required: true
+            responses:
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Example of changed Customer:
+                                    value:
+                                        id: 1
+                                        name: Alice
+                                        email: alice@example.com
+                                        age: '18'
+                    description: Returns the modified Customer to the user
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Example of invalid params:
+                                    value: '{ error: ''Invalid customer ID'' }'
+                    description: User has not added required params to the modified Customer
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Example of Customer not found:
+                                    value: '{ error: ''Customer not found'' }'
+                    description: User did not provide an id
+            operationId: id
+            summary: Update a Customer
+            description: Returns an updated customer when modification of the customer is successful
 components:
     schemas:
         Error:
@@ -407,10 +483,8 @@ components:
                     format: int32
                     description: ''
                     type: integer
-            example: |-
-                { 
-                    "id": 1,
-                    "name": 'Alice', 
-                    "email": 'alice@example.com', 
-                    "age": '18' 
-                }
+            example:
+                id: 1
+                name: Alice
+                email: alice@example.com
+                age: '18'

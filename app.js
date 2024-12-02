@@ -143,6 +143,24 @@ app.post('/customers', (req, res) => {
     res.status(201).location(`${getBaseURL(req)}/customers/${newCustomer.id}`).send(newCustomer);
 });
 
+app.put('/customers/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const customer = customers.find((c) => c.id === id);
+
+    if (!customer) {
+        return res.status(404).send({ error: 'Customer not found' });
+    }
+
+    const { name, email, age} = req.body;
+
+    // Update the customer object
+    customer.name = name;
+    customer.email = email;
+    customer.age = age;
+
+    res.status(200).send(customer);
+});
+
 app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)
 });
