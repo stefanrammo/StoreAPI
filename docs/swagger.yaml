@@ -199,7 +199,8 @@ paths:
                             type: integer
                         examples:
                             Id of drink:
-                                value: '1'
+                                value:
+                                    - 1
                 required: true
             tags:
                 - drinks
@@ -430,6 +431,47 @@ paths:
             operationId: id
             summary: Update a Customer
             description: Returns an updated customer when modification of the customer is successful
+        delete:
+            requestBody:
+                description: Id of customer that is to be deleted.
+                content:
+                    application/json:
+                        schema:
+                            type: integer
+                        examples:
+                            Id of customer:
+                                value:
+                                    - 1
+                required: true
+            tags:
+                - customers
+            parameters:
+                -
+                    examples:
+                        Example of id of customer:
+                            value: '1'
+                    name: id
+                    description: Id of Customer
+                    schema:
+                        type: integer
+                    in: path
+                    required: true
+            responses:
+                '204':
+                    description: Returns 204 if customer is successfully deleted
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Customer not found:
+                                    value:
+                                        error: Customer not found
+                    description: 'Customer is not found, undefined id'
+            operationId: id
+            summary: Delete a Customer
+            description: Deletes a given id customer
 components:
     schemas:
         Error:

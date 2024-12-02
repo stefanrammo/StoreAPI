@@ -161,6 +161,14 @@ app.put('/customers/:id', (req, res) => {
     res.status(200).send(customer);
 });
 
+app.delete('/customers/:id', (req, res) => {
+    if (typeof customers[req.params.id - 1] === 'undefined') {
+        res.status(404).send({ error: 'Customers not found' })
+    };
+    customers.splice(req.params.id - 1, 1);
+    return res.status(204).send(customers[req.params.id - 1])
+});
+
 app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)
 });
