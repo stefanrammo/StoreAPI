@@ -138,7 +138,7 @@ app.post('/customers', (req, res) => {
         email,
         age,
     };
-    drinks.push(newCustomer);
+    customers.push(newCustomer);
 
     res.status(201).location(`${getBaseURL(req)}/customers/${newCustomer.id}`).send(newCustomer);
 });
@@ -174,7 +174,7 @@ app.get('/orders', (req, res) => {
         (order)    // Add more orders here...
 });
 
-/* app.post('/orders', (req, res) => {
+app.post('/orders', (req, res) => {
     const { customer_id, order_date } = req.body;
 
     // Check if all required fields are present
@@ -182,28 +182,38 @@ app.get('/orders', (req, res) => {
         return res.status(400).send({ error: 'Missing required fields' });
     }
 
-    // Check if a customer with the same name already exists
-    const existingOrder = orders.find((order) => order.name.toLowerCase() === name.toLowerCase());
-    if (existingCustomer) {
-        return res.status(409).send({ error: 'Customer with the same name already exists' });
+    // Add the new order
+    const newOrder = {
+        id: customers.length + 1,
+        order_date,
+        customers_id
+    };
+    orders.push(newOrder);
+
+    res.status(201).location(`${getBaseURL(req)}/orders/${newOrder.id}`).send(newOrder);
+});
+
+/* app.put('/orders/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const order = orders.find((o) => o.id === id);
+
+    if (!order) {
+        return res.status(404).send({ error: 'Order not found' });
     }
 
-    // Add the new customer
-    const newCustomer = {
-        id: customers.length + 1,
-        name,
-        email,
-        age,
-    };
-    drinks.push(newCustomer);
+    const { customer_id, order_date } = req.body;
 
-    res.status(201).location(`${getBaseURL(req)}/customers/${newCustomer.id}`).send(newCustomer);
-}); */
+    // Update the order object
+    order.customer_id = customer_id;
+    order.order_date = order_date;
+
+    res.status(201).send(order);
+});
 
 
 app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)
-});
+}); */
 
 function getBaseURL(req) {
     return req.connection && req.connection.encrypted ?

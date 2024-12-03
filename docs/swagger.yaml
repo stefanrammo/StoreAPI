@@ -495,6 +495,61 @@ paths:
                     description: returns a list of orders
             summary: get list of all orders from api
             description: Returns a list of all orders in the API to the requesting user
+        post:
+            requestBody:
+                description: Data of order that the user wants to add
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Order'
+                        examples:
+                            Example of submittable data:
+                                value:
+                                    id: 1
+                                    customers_id: 1
+                                    order_date: 01.01.2024
+                required: true
+            tags:
+                - orders
+            responses:
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Order that is created:
+                                    value:
+                                        id: 1
+                                        customers_id: 1
+                                        order_date: 01.01.2024
+                    description: Return 201 to user if creation of new order was successful
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Missing params:
+                                    value:
+                                        -
+                                            error: One or multiple param(s) missing
+                    description: Return 400 to the user if one or multiple param(s) are missing
+                '409':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Order already exists:
+                                    value:
+                                        -
+                                            error: Order with given data already exists
+                    description: Return 409 to the user if order already exists
+            summary: Add new order
+            description: Adds a new order into the array
 components:
     schemas:
         Error:
@@ -553,3 +608,22 @@ components:
                 name: Alice
                 email: alice@example.com
                 age: '18'
+        Order:
+            description: Properties of an order
+            type: object
+            properties:
+                id:
+                    format: int32
+                    description: ''
+                    type: integer
+                customer_id:
+                    format: int32
+                    description: ''
+                    type: integer
+                order_date:
+                    description: ''
+                    type: string
+            example:
+                id: 1
+                customers_id: 1
+                order_date: 01.01.2024
