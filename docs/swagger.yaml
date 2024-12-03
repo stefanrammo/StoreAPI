@@ -472,6 +472,29 @@ paths:
             operationId: id
             summary: Delete a Customer
             description: Deletes a given id customer
+    /orders:
+        get:
+            tags:
+                - orders
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                List of orders:
+                                    value: |-
+                                        [
+                                            "id": 1,
+                                            "customers_id": 1, 
+                                            "order_date": "01.01.2024" 
+                                        ]
+                    description: returns a list of orders
+            summary: get list of all orders from api
+            description: Returns a list of all orders in the API to the requesting user
 components:
     schemas:
         Error:

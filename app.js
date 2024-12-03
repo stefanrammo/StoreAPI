@@ -18,14 +18,14 @@ const customers = [{ id: 1, name: 'Alice', email: 'alice@example.com', age: '18'
 { id: 3, name: 'Charlie', email: 'charlie@example.com', age: '19' }
 ];
 
-const order = [{ customers_id: 1, order_date: "01.01.2024" },
-{ customers_id: 2, order_date: "02.02.2024" },
-{ customers_id: 3, order_date: "03.03.2024" }
+const order = [{ id: 1, customers_id: 1, order_date: "01.01.2024" },
+{ id: 2, customers_id: 2, order_date: "02.02.2024" },
+{ id: 3, customers_id: 3, order_date: "03.03.2024" }
 ];
 
-const comments = [{ customers_id: 1, drink_id: 1, comment: 'Tänan viinilt!', review_score: 5 },
-{ customers_id: 2, drink_id: 2, comment: 'Kõik päris!', review_score: 4 },
-{ customers_id: 3, drink_id: 3, comment: 'Mõtetu viin!', review_score: 3 }
+const comments = [{id: 1, customers_id: 1, drink_id: 1, comment: 'Tänan viinilt!', review_score: 5 },
+{ id: 2, customers_id: 2, drink_id: 2, comment: 'Kõik päris!', review_score: 4 },
+{ id: 3, customers_id: 3, drink_id: 3, comment: 'Mõtetu viin!', review_score: 3 }
 ];
 
 app.get('/drinks', (req, res) => {
@@ -99,7 +99,7 @@ app.put('/drinks/:id', (req, res) => {
     if (expiration_date !== undefined) drink.expiration_date = expiration_date;
     if (order_id !== undefined) drink.order_id = order_id;
 
-    res.status(200).send(drink);
+    res.status(201).send(drink);
 });
 
 app.get('/customers', (req, res) => {
@@ -158,7 +158,7 @@ app.put('/customers/:id', (req, res) => {
     customer.email = email;
     customer.age = age;
 
-    res.status(200).send(customer);
+    res.status(201).send(customer);
 });
 
 app.delete('/customers/:id', (req, res) => {
@@ -168,6 +168,38 @@ app.delete('/customers/:id', (req, res) => {
     customers.splice(req.params.id - 1, 1);
     return res.status(204).send(customers[req.params.id - 1])
 });
+
+app.get('/orders', (req, res) => {
+    res.send
+        (order)    // Add more orders here...
+});
+
+/* app.post('/orders', (req, res) => {
+    const { customer_id, order_date } = req.body;
+
+    // Check if all required fields are present
+    if (!order_date || !customer_id) {
+        return res.status(400).send({ error: 'Missing required fields' });
+    }
+
+    // Check if a customer with the same name already exists
+    const existingOrder = orders.find((order) => order.name.toLowerCase() === name.toLowerCase());
+    if (existingCustomer) {
+        return res.status(409).send({ error: 'Customer with the same name already exists' });
+    }
+
+    // Add the new customer
+    const newCustomer = {
+        id: customers.length + 1,
+        name,
+        email,
+        age,
+    };
+    drinks.push(newCustomer);
+
+    res.status(201).location(`${getBaseURL(req)}/customers/${newCustomer.id}`).send(newCustomer);
+}); */
+
 
 app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)
