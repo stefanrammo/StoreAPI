@@ -193,6 +193,16 @@ app.post('/orders', (req, res) => {
     res.status(201).location(`${getBaseURL(req)}/orders/${newOrder.id}`).send(newOrder);
 });
 
+app.get('/orders/:id', (req, res) => {
+    if (typeof orders[req.params.id - 1] === 'undefined') {
+        res.status(404).send({ error: 'Order not found' })
+    };
+    if (req.params.id == null) {
+        return res.status(400).send({ error: 'Invalid order ID' })
+    };
+    res.send(orders[req.params.id - 1])
+});
+
 /* app.put('/orders/:id', (req, res) => {
     const id = parseInt(req.params.id, 10);
     const order = orders.find((o) => o.id === id);

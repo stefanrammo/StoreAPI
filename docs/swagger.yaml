@@ -550,6 +550,61 @@ paths:
                     description: Return 409 to the user if order already exists
             summary: Add new order
             description: Adds a new order into the array
+    '/orders/{id}/':
+        get:
+            tags:
+                - orders
+            parameters:
+                -
+                    examples:
+                        Example of id of customer:
+                            value:
+                                - 1
+                    name: id
+                    description: id of order the user has requested
+                    schema:
+                        type: integer
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Example of order with id:
+                                    value:
+                                        id: 1
+                                        customers_id: 1
+                                        order_date: 01.01.2024
+                    description: Returns details of a order to the user
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Invalid order id:
+                                    value:
+                                        error: Invalid id inserted
+                    description: Returns 400 to the user if an invalid id was entered
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                'Order /w+ was not found ':
+                                    value:
+                                        -
+                                            error: Order \w+ was not found in customer array
+                    description: Returns 404 to the user if order with this id is not found
+            operationId: id
+            summary: Get full details of the order
+            description: Return full details of the given id of order
 components:
     schemas:
         Error:
