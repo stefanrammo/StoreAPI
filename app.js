@@ -218,7 +218,7 @@ app.put('/orders/:id', (req, res) => {
     order.order_date = order_date;
 
     res.status(201).send(order);
-});
+}); 
 
 /* app.delete('/orders/:id', (req, res) => {
     if (typeof orders[req.params.id - 1] === 'undefined') {
