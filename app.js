@@ -220,13 +220,13 @@ app.put('/orders/:id', (req, res) => {
     res.status(201).send(order);
 }); 
 
-/* app.delete('/orders/:id', (req, res) => {
+app.delete('/orders/:id', (req, res) => {
     if (typeof orders[req.params.id - 1] === 'undefined') {
         res.status(404).send({ error: 'Order not found' })
     };
     orders.splice(req.params.id - 1, 1);
     return res.status(204).send(orders[req.params.id - 1])
-}); */
+});
 
 app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)

@@ -668,6 +668,47 @@ paths:
             operationId: id
             summary: Update an Order
             description: Returns an updated order when modification of the order is successful
+        delete:
+            requestBody:
+                description: Id of order that is to be deleted.
+                content:
+                    application/json:
+                        schema:
+                            type: integer
+                        examples:
+                            Id of order:
+                                value:
+                                    - 1
+                required: true
+            tags:
+                - orders
+            parameters:
+                -
+                    examples:
+                        Example of id of order:
+                            value: '1'
+                    name: id
+                    description: Id of Order
+                    schema:
+                        type: integer
+                    in: path
+                    required: true
+            responses:
+                '204':
+                    description: Returns 204 if order is successfully deleted
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Order not found:
+                                    value:
+                                        error: Order not found
+                    description: 'Order is not found, undefined id'
+            operationId: id
+            summary: Delete an Order
+            description: Deletes a given id order
 components:
     schemas:
         Error:
