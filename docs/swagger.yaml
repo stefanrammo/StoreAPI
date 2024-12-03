@@ -605,6 +605,69 @@ paths:
             operationId: id
             summary: Get full details of the order
             description: Return full details of the given id of order
+        put:
+            requestBody:
+                description: Properties of order to be changed
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Order'
+                        examples:
+                            Example of order properties:
+                                value:
+                                    id: 1
+                                    customers_id: 1
+                                    order_date: 01.01.2024
+                required: true
+            tags:
+                - orders
+            parameters:
+                -
+                    examples:
+                        Example of id of order:
+                            value: '1'
+                    name: id
+                    description: Id of order to be updated
+                    schema:
+                        type: integer
+                    in: path
+                    required: true
+            responses:
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Example of changed Order:
+                                    value:
+                                        id: 1
+                                        customer_id: 1
+                                        order_date: 01.01.2024
+                    description: Returns the modified Order to the user
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Example of invalid params:
+                                    value: "{ error: 'Invalid customer ID' }\t\r\n"
+                    description: User has not added required params to the modified Order
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                            examples:
+                                Example of Order with id not found:
+                                    value: "{ error: 'Customer not found' }\t\r\n"
+                    description: User did not provide an id
+            operationId: id
+            summary: Update an Order
+            description: Returns an updated order when modification of the order is successful
 components:
     schemas:
         Error:

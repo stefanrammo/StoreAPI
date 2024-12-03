@@ -203,7 +203,7 @@ app.get('/orders/:id', (req, res) => {
     res.send(orders[req.params.id - 1])
 });
 
-/* app.put('/orders/:id', (req, res) => {
+app.put('/orders/:id', (req, res) => {
     const id = parseInt(req.params.id, 10);
     const order = orders.find((o) => o.id === id);
 
@@ -220,10 +220,17 @@ app.get('/orders/:id', (req, res) => {
     res.status(201).send(order);
 });
 
+/* app.delete('/orders/:id', (req, res) => {
+    if (typeof orders[req.params.id - 1] === 'undefined') {
+        res.status(404).send({ error: 'Order not found' })
+    };
+    orders.splice(req.params.id - 1, 1);
+    return res.status(204).send(orders[req.params.id - 1])
+}); */
 
 app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)
-}); */
+});
 
 function getBaseURL(req) {
     return req.connection && req.connection.encrypted ?
