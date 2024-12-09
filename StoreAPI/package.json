@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/stefanrammo/StoreAPI#readme",
   "dependencies": {
+    "dotenv": "16.4.5",
     "express": "^4.21.1",
+    "mariadb": "^3.2.0",
     "nodemon": "^3.1.7",
+    "sequelize": "^6.37.4",
     "swagger-ui-express": "^5.0.1",
     "yamljs": "^0.3.0"
   }
