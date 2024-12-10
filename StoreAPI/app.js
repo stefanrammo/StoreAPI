@@ -4,12 +4,14 @@ const port = process.env.PORT || 8080;
 const host = 'localhost';
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const yamljs = require('yamljs');
 const swaggerDoc = yamljs.load('./docs/swagger.yaml');
 
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use(express.json());
+app.use(cors);
 
 /* const drinks = [{ id: 1, order_id: 1, name: 'Laua Viin', expiration_date: null, price: 2, description: '' },
 { id: 2, order_id: null, name: 'Põhja Viin', expiration_date: null, price: 1.5, description: '' },
@@ -33,59 +35,7 @@ const comments = [{id: 1, customers_id: 1, drink_id: 1, comment: 'Tänan viinilt
  */
 
 
-app.get('/drinks', async (req, res) => {
-    res.send(await Promise.resolve(drinks.map(({ id, name }) => ({ id, name }))));
-});
 
-app.get('/drinks/:id', async (req, res) => {
-    try {
-        const drink = await findDrinkById(req.params.id);
-        res.send(drink);
-    } catch (error) {
-        res.status(404).send({ error: error.message });
-    }
-});
-
-app.post('/drinks', async (req, res) => {
-    const { name, price, description } = req.body;
-    if (!name || !price || !description) {
-        return res.status(400).send({ error: 'Missing required fields' });
-    }
-    const existingDrink = drinks.find(d => d.name.toLowerCase() === name.toLowerCase());
-    if (existingDrink) return res.status(409).send({ error: 'Drink with the same name already exists' });
-
-    const newDrink = {
-        order_id: null,
-        name,
-        expiration_date: null,
-        price,
-        description,
-    };
-    const createdDrink = await db.drinks.create(newDrink);
-    res.status(201).location(`${getBaseURL(req)}/drinks/${createdDrink.id}`).send(createdDrink.id);
-});
-
-app.delete('/drinks/:id', async (req, res) => {
-    try {
-        const drink = await findDrinkById(req.params.id);
-        const index = drinks.indexOf(drink);
-        drinks.splice(index, 1);
-        res.status(204).send();
-    } catch (error) {
-        res.status(404).send({ error: error.message });
-    }
-});
-
-app.put('/drinks/:id', async (req, res) => {
-    try {
-        const drink = await findDrinkById(req.params.id);
-        const { name, price, description, expiration_date, order_id } = req.body;
-        Object.assign(drink, { name, price, description, expiration_date, order_id });
-        res.status(200).send(drink);
-    } catch (error) {
-        res.status(404).send({ error: error.message });
-    }
-});
 
 app.get('/customers', async (req, res) => {
     res.send(await Promise.resolve(customers));
@@ -176,18 +126,4 @@ app.listen(port, () => {
     console.log(`API up at http://localhost:${port}`)
 });
 
-function getBaseURL(req) {
-    return req.connection && req.connection.encrypted ?
-        "https" : "http" + `://${req.headers.host}`;
-}
 
-async function findDrinkById(id) {
-    const drink = drinks.find(d => d.id === parseInt(id));
-    if (isNaN(drink.id)) {
-        throw new Error('Invalid drink id'); //400
-    }
-    if (!drink) {
-        throw new Error('Drink not found'); //404
-    }
-    return drink;
-}

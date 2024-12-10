@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/stefanrammo/StoreAPI#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "16.4.5",
     "express": "^4.21.1",
     "mariadb": "^3.2.0",
@@ -28,6 +29,5 @@
   },
   "directories": {
     "doc": "docs"
-  },
-  "devDependencies": {}
+  }
 }
