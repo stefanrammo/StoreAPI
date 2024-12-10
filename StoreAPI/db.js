@@ -28,6 +28,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.drinks = require("./models/drink")(sequelize, DataTypes);
+db.customers = require("./models/Customer")(sequelize, DataTypes);
 
 // Synchronize models
 const sync = async () => {

@@ -1,9 +1,11 @@
 const {db} = require('../db');
-const Utils = require('../utils');
+const Utils = require('./utils');
 
 
 exports.getAll = async (req, res) => {
     res.send(await Promise.resolve(drinks.map(({ id, name }) => ({ id, name }))));
+/*     const drinks = await db.drinks.findAll();
+    res.send(drinks.map(({id, name}) => {return {id, name}})); */
 };
 
 exports.getById = async (req, res) => {

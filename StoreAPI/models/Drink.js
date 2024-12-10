@@ -1,3 +1,5 @@
+const { DESCRIBE } = require("sequelize/lib/query-types");
+
 module.exports = (sequelize, DataTypes) => {
     const Drink = sequelize.define(
         "Drink",
@@ -19,6 +21,14 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.DATEONLY,
                 allowNull: true,
             },
+            price: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            },
+            description: {
+                type: DataTypes.STRING,
+                allowNull: true
+            }
         },
         {
             timestamps: false, // Disable automatic creation of createdAt and updatedAt fields

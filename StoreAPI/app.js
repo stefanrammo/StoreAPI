@@ -9,9 +9,19 @@ const swaggerUI = require('swagger-ui-express');
 const yamljs = require('yamljs');
 const swaggerDoc = yamljs.load('./docs/swagger.yaml');
 
+const {sync} = require("./db");
+
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use(express.json());
 app.use(cors);
+
+app.get('/', (req, res) => {
+    res.send(`Server running. Documentation at <a href="http://${host}:${port}/docs">/docs</a>`);
+});
+
+require('./routes/drinkRoutes')(app);
+require('./routes/customerRoutes')(app);
+
 
 /* const drinks = [{ id: 1, order_id: 1, name: 'Laua Viin', expiration_date: null, price: 2, description: '' },
 { id: 2, order_id: null, name: 'Põhja Viin', expiration_date: null, price: 1.5, description: '' },
@@ -34,39 +44,6 @@ const comments = [{id: 1, customers_id: 1, drink_id: 1, comment: 'Tänan viinilt
 ];
  */
 
-
-
-
-app.get('/customers', async (req, res) => {
-    res.send(await Promise.resolve(customers));
-});
-
-app.get('/customers/:id', async (req, res) => {
-    const customer = customers.find(c => c.id === parseInt(req.params.id));
-    if (!customer) return res.status(404).send({ error: 'Customer not found' });
-    res.send(await Promise.resolve(customer));
-});
-
-app.post('/customers', async (req, res) => {
-    const { name, email, age } = req.body;
-    if (!name || !email || !age) {
-        return res.status(400).send({ error: 'Missing required fields' });
-    }
-    const existingCustomer = customers.find(c => c.name.toLowerCase() === name.toLowerCase());
-    if (existingCustomer) return res.status(409).send({ error: 'Customer with the same name already exists' });
-
-    const newCustomer = { id: customers.length + 1, name, email, age };
-    customers.push(newCustomer);
-    res.status(201).location(`${getBaseURL(req)}/customers/${newCustomer.id}`).send(await Promise.resolve(newCustomer));
-});
-
-app.delete('/customers/:id', async (req, res) => {
-    const index = customers.findIndex(c => c.id === parseInt(req.params.id));
-    if (index === -1) return res.status(404).send({ error: 'Customer not found' });
-
-    customers.splice(index, 1);
-    res.status(204).send();
-});
 
 app.post('/orders', (req, res) => {
     const { customer_id, order_date } = req.body;
@@ -122,7 +99,10 @@ app.delete('/orders/:id', (req, res) => {
     return res.status(204).send(orders[req.params.id - 1])
 });
 
-app.listen(port, () => {
+app.listen(port, async() => {
+    if (process.env.SYNC === "true") {
+        await sync();
+    }
     console.log(`API up at http://localhost:${port}`)
 });
 
