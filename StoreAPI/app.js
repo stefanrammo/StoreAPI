@@ -1,23 +1,25 @@
 require('dotenv').config();
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3001;
 const host = 'localhost';
 const express = require('express');
-const app = express();
 const cors = require('cors');
+const app = express();
+
 const swaggerUI = require('swagger-ui-express');
 const yamljs = require('yamljs');
 const swaggerDoc = yamljs.load('./docs/swagger.yaml');
 
 const {sync} = require("./db");
 
+app.use(cors());
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use(express.json());
-app.use(cors);
 
-app.get('/', (req, res) => {
+
+app.get("/", (req, res) => {
     res.send(`Server running. Documentation at <a href="http://${host}:${port}/docs">/docs</a>`);
-});
+})
 
 require('./routes/drinkRoutes')(app);
 require('./routes/customerRoutes')(app);

@@ -8,4 +8,4 @@ module.exports = (app) => {
         .get(DrinksController.getById)
         .put(DrinksController.editById)
         .delete(DrinksController.deleteById)
-        }
+}

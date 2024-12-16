@@ -5,8 +5,11 @@ export default {
   data() { return {
     allDrinks: []
   }},
-  async Created() {
-    this.allDrinks = await (await fetch('https://localhost:8080/drinks')).json();
+  async created() {
+  const response = await fetch('http://localhost:8080/drinks');
+  const data = await response.json();
+  console.log(data);  // Log the fetched data to verify it's being returned correctly
+  this.allDrinks = data;
   }
 }
 </script>

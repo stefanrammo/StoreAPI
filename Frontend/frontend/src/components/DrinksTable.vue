@@ -20,7 +20,7 @@ export default {
                     <td>{{ item.name }}</td>
                     <td>{{ item.price }}</td>
                     <td>{{ item.description }}</td>
-                    <td>{{ item.expirationDate }}</td>
+                    <td>{{ item.expiration_date }}</td>
                     <!-- Add delete button here -->
                     <td>
                         <button @click="deleteItem(item)">Delete</button>
