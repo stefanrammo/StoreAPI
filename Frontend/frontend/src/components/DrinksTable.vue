@@ -16,6 +16,7 @@
                 <td>{{ item.expiration_date || 'N/A' }}</td>
                 <td>
                     <button @click="$emit('delete-item', item.id)">Delete</button>
+                    <button @click="$emit('edit-item', item)">Edit</button> <!-- Add Edit button -->
                 </td>
             </tr>
         </tbody>

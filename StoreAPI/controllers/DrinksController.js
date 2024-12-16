@@ -57,7 +57,7 @@ exports.create = async (req, res) => {
 
     // Create a new drink in the database
     const createdDrink = await db.drinks.create(newDrink);
-    res.status(201).location(`${getBaseURL(req)}/drinks/${createdDrink.id}`).send(createdDrink.id);
+    res.status(201).json({ id: createdDrink.id });
 };
 
 
