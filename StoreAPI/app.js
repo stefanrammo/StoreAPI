@@ -21,8 +21,8 @@ app.get("/", (req, res) => {
     res.send(`Server running. Documentation at <a href="http://${host}:${port}/docs">/docs</a>`);
 })
 
-require('./routes/drinkRoutes')(app);
-require('./routes/customerRoutes')(app);
+const drinkRoutes = require('./routes/drinkRoutes')(app);
+const customerRoutes = require('./routes/customerRoutes')(app);
 
 
 /* const drinks = [{ id: 1, order_id: 1, name: 'Laua Viin', expiration_date: null, price: 2, description: '' },
