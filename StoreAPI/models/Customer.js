@@ -18,6 +18,13 @@ module.exports = (sequelize, DataTypes) => {
                     isEmail: true, // Ensure valid email format
                 },
             },
+            password: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    len: [3, 255], // Ensure password length is between 3 and 255 characters
+                },
+            },
             age: {
                 type: DataTypes.INTEGER,
                 allowNull: false,

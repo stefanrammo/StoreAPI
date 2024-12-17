@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 8080;
 const host = 'localhost';
 const express = require('express');
 const cors = require('cors');
@@ -12,9 +12,15 @@ const swaggerDoc = yamljs.load('./docs/swagger.yaml');
 
 const {sync} = require("./db");
 
+const { db } = require('./db');
+const jwt = require('jsonwebtoken'); 
+const bcrypt = require('bcrypt'); 
+
 app.use(cors());
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use(express.json());
+
+
 
 
 app.get("/", (req, res) => {
@@ -23,19 +29,14 @@ app.get("/", (req, res) => {
 
 const drinkRoutes = require('./routes/drinkRoutes')(app);
 const customerRoutes = require('./routes/customerRoutes')(app);
+// src/routes/authRoutes.js
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);  // Prefixing all auth routes with '/api/auth'
 
 
-/* const drinks = [{ id: 1, order_id: 1, name: 'Laua Viin', expiration_date: null, price: 2, description: '' },
-{ id: 2, order_id: null, name: 'Põhja Viin', expiration_date: null, price: 1.5, description: '' },
-{ id: 3, order_id: null, name: 'Võõra Viin', expiration_date: null, price: 3, description: '' },
-];
 
-const customers = [{ id: 1, name: 'Alice', email: 'alice@example.com', age: '18' },
-{ id: 2, name: 'Bob', email: 'bob@example.com', age: '22' },
-{ id: 3, name: 'Charlie', email: 'charlie@example.com', age: '19' }
-];
 
-const order = [{ id: 1, customers_id: 1, order_date: "01.01.2024" },
+/*const order = [{ id: 1, customers_id: 1, order_date: "01.01.2024" },
 { id: 2, customers_id: 2, order_date: "02.02.2024" },
 { id: 3, customers_id: 3, order_date: "03.03.2024" }
 ];

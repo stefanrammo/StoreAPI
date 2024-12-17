@@ -5,8 +5,8 @@ const Utils = require('./utils');
 exports.getAll = async (req, res) => {
     try {
         const customers = await db.customers.findAll(); // Fetch customers from the database
-        res.send(customers.map(({ id, name, email, age }) => ({
-            id, name, email, age
+        res.send(customers.map(({ id, name, email, password, age }) => ({
+            id, name, email, password, age
         })));
     } catch (error) {
         console.error('Error fetching customers:', error);
@@ -27,30 +27,51 @@ exports.getById = async (req, res) => {
     }
 };
 
-// Create a new customer
+const bcrypt = require('bcrypt');
+
 exports.create = async (req, res) => {
-    const { name, email, age } = req.body;
-    if (!name || !email || !age) {
-        return res.status(400).send({ error: 'Missing required fields' });
+    const { name, email, age, password } = req.body;
+
+    // Check if all required fields are provided
+    if (!name || !email || !age || !password) {
+        return res.status(400).send({ error: 'Missing required fields: name, email, age, or password' });
     }
 
-    // Check if a customer with the same name already exists in the database
-    const existingCustomer = await db.customers.findOne({
-        where: {
-            name: name.toLowerCase() // Case-insensitive comparison
+    try {
+        // Check if a customer with the same name already exists in the database
+        const existingCustomer = await db.customers.findOne({
+            where: {
+                name: name.toLowerCase(), // Case-insensitive comparison
+            },
+        });
+
+        if (existingCustomer) {
+            return res.status(409).send({ error: 'Customer with the same name already exists' });
         }
-    });
 
-    if (existingCustomer) {
-        return res.status(409).send({ error: 'Customer with the same name already exists' });
+        // Hash the password for security
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Prepare new customer data
+        const newCustomer = { 
+            name, 
+            email, 
+            age, 
+            password: hashedPassword, 
+        };
+
+        // Create a new customer in the database
+        const createdCustomer = await db.customers.create(newCustomer);
+
+        // Respond with the ID of the newly created customer
+        res.status(201).json({ id: createdCustomer.id });
+    } catch (error) {
+        console.error('Error creating customer:', error);
+        res.status(500).send({ error: 'Internal Server Error' });
     }
+};
 
-    const newCustomer = { name, email, age };
 
-    // Create a new customer in the database
-    const createdCustomer = await db.customers.create(newCustomer);
-    res.status(201).json({ id: createdCustomer.id });
- };
 
 // Delete a customer by ID
 exports.deleteById = async (req, res) => {
@@ -74,11 +95,12 @@ exports.editById = async (req, res) => {
             return res.status(404).send({ error: 'Customer not found' });
         }
 
-        const { name, email, age } = req.body;
+        const { name, email, password, age } = req.body;
 
         // Update the customer fields if provided
         if (name) customer.name = name;
         if (email) customer.email = email;
+        if (password) customer.password = password;
         if (age) customer.age = age;
 
         // Save the updated customer to the database

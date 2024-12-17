@@ -3,6 +3,9 @@ import HomeView from '../views/HomeView.vue';
 
 // Import the DrinksView component
 import DrinksView from '../views/DrinksView.vue';
+import CustomersView from '../views/CustomersView.vue';
+import LoginView from '../views/LoginView.vue';
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +27,20 @@ const router = createRouter({
       path: '/drinks', // Add the drinks path
       name: 'drinks',
       component: DrinksView, // Link to the DrinksView component
+    },
+    { path: '/login', name: 'login', component: LoginView },
+    {
+      path: '/customers',
+      name: 'customers',
+      component: CustomersView,
+      beforeEnter: (to, from, next) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          next('/login'); // Redirect to login if not authenticated
+        } else {
+          next();
+        }
+      }
     },
   ],
 });
