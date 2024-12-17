@@ -28,17 +28,26 @@ export default {
         };
     },
     methods: {
-        // Inside your Vue component's method
         login() {
+            // Clear previous error message
+            this.error = null;
+            
             axios.post('http://localhost:8080/api/auth/login', {
                 email: this.email,
                 password: this.password
             })
                 .then(response => {
+                    // On success, store the token in localStorage
                     console.log('Login successful', response);
+                    localStorage.setItem('token', response.data.token);  // Store the token received in response
+                    
+                    // Redirect to the customers view
+                    this.$router.push({ name: 'customers' });
                 })
                 .catch(error => {
+                    // On failure, display error message
                     console.log('Login failed:', error);
+                    this.error = 'Login failed. Please check your credentials.';
                 });
         }
     }
