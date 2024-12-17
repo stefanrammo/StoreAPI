@@ -27,15 +27,17 @@ exports.getById = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
+    
     console.log('Request Body:', req.body); // Log the incoming body
 
     const { name, price, description } = req.body;
     console.log('Name:', name, 'Price:', price, 'Description:', description); // Log individual fields
 
-    if (!name || !price || !description) {
+    
+    if (!name || name.trim() === "" || price == null || description == null || description.trim() === "") {
         return res.status(400).send({ error: 'Missing required fields' });
     }
-
+    
     // Check if a drink with the same name already exists in the database
     const existingDrink = await db.drinks.findOne({
         where: {
