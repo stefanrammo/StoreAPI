@@ -1,11 +1,11 @@
-const DrinksController = require('../controllers/DrinksController');
+const drinksController = require('../controllers/drinksController');
 
 module.exports = (app) => {
     app.route('/drinks')
-        .get(DrinksController.getAll) 
-        .post(DrinksController.create)
+        .get(drinksController.getAll) 
+        .post(drinksController.create)
     app.route('/drinks/:id')
-        .get(DrinksController.getById)
-        .put(DrinksController.editById)
-        .delete(DrinksController.deleteById)
+        .get(drinksController.getById)
+        .put(drinksController.editById)
+        .delete(drinksController.deleteById)
 }

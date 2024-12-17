@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <nav>
       <ul>
@@ -35,6 +36,7 @@
     },
     watch: {
       // Watch for changes to localStorage and update the authentication state
+      // eslint-disable-next-line no-unused-vars
       '$route'(to, from) {
         this.isAuthenticated = !!localStorage.getItem('token');
       }

@@ -1,5 +1,3 @@
-const { DESCRIBE } = require("sequelize/lib/query-types");
-
 module.exports = (sequelize, DataTypes) => {
     const Drink = sequelize.define(
         "Drink",
@@ -11,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             order_id: {
                 type: DataTypes.INTEGER,
-                allowNull: true,
+                allowNull: true, // Optional: Consider removing if using many-to-many relationship
             },
             name: {
                 type: DataTypes.STRING,
@@ -23,18 +21,33 @@ module.exports = (sequelize, DataTypes) => {
             },
             price: {
                 type: DataTypes.INTEGER,
-                allowNull: false
+                allowNull: false,
             },
             description: {
                 type: DataTypes.STRING,
-                allowNull: true
-            }
+                allowNull: true,
+            },
         },
         {
-            timestamps: false, // Disable automatic creation of createdAt and updatedAt fields
-            tableName: "drinks", // Explicitly specify the table name
+            timestamps: false,
+            tableName: "drinks",
         }
     );
+
+    Drink.associate = (models) => {
+        // A Drink can have many Comments
+        Drink.hasMany(models.Comment, {
+            foreignKey: "drink_id",
+            as: "comments",
+        });
+
+        // A Drink can belong to many Orders through Order_Drinks
+        Drink.belongsToMany(models.Order, {
+            through: "Order_Drinks", // Join table for many-to-many
+            foreignKey: "drink_id",
+            as: "orders",
+        });
+    };
 
     return Drink;
 };

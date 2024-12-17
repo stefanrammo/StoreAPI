@@ -35,10 +35,18 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
         {
-            timestamps: false, // Disable automatic creation of createdAt and updatedAt fields
-            tableName: "customers", // Explicitly specify the table name
+            timestamps: false,
+            tableName: "customers",
         }
     );
+
+    Customer.associate = (models) => {
+        // A Customer can have many Orders
+        Customer.hasMany(models.Order, { foreignKey: "customer_id", as: "orders" });
+
+        // A Customer can have many Comments
+        Customer.hasMany(models.Comment, { foreignKey: "customer_id", as: "comments" });
+    };
 
     return Customer;
 };
