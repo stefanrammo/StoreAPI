@@ -1,5 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+
+// Import the DrinksView component
+import DrinksView from '../views/DrinksView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,7 +20,12 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
+    {
+      path: '/drinks', // Add the drinks path
+      name: 'drinks',
+      component: DrinksView, // Link to the DrinksView component
+    },
   ],
-})
+});
 
-export default router
+export default router;
