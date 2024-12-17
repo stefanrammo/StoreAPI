@@ -30,7 +30,6 @@ db.customers = require("./models/Customer")(sequelize, DataTypes);
 db.orders = require("./models/Order")(sequelize, DataTypes);
 db.comments = require("./models/Comment")(sequelize, DataTypes);
 
-
 // Define Relationships
 
 // A Customer can have many Orders
@@ -57,12 +56,12 @@ db.drinks.belongsToMany(db.orders, {
     as: "orders",
 });
 
-// Sync the models
+// Sync the models without altering the database
 const sync = async () => {
-    await sequelize.sync({ alter: true });
+    // Avoid altering the schema automatically on subsequent runs
+    await sequelize.sync({ force: false }); // Use force: false to avoid altering the schema
     console.log("Models have been synchronized successfully.");
 };
-
 
 sync();
 

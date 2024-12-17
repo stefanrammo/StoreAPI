@@ -34,7 +34,7 @@ exports.login = async (req, res) => {
 };
 
 // Create user method
-exports.createUser = async (req, res) => {
+exports.signup = async (req, res) => {
     const { name, email, password, age } = req.body;
 
     if (!name || !email || !password || !age) {
@@ -42,6 +42,11 @@ exports.createUser = async (req, res) => {
     }
 
     try {
+        const existingUser = await db.customers.findOne({ where: { email } });
+        if (existingUser) {
+            return res.status(409).send({ error: 'Email already in use' });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = { name, email, password: hashedPassword, age };
         const createdUser = await db.customers.create(newUser);
@@ -52,3 +57,4 @@ exports.createUser = async (req, res) => {
         res.status(500).send({ error: 'Internal Server Error' });
     }
 };
+

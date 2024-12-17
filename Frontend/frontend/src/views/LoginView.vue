@@ -14,6 +14,8 @@
             <p v-if="error" class="error">{{ error }}</p>
         </form>
     </div>
+    <p>Don't have an account? <router-link to="/signup">Sign Up</router-link></p>
+
 </template>
 
 <script>

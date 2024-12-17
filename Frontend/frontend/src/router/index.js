@@ -5,6 +5,7 @@ import HomeView from '../views/HomeView.vue';
 import DrinksView from '../views/DrinksView.vue';
 import CustomersView from '../views/CustomersView.vue';
 import LoginView from '../views/LoginView.vue';
+import Signup from '../views/SignupView.vue';
 
 
 const router = createRouter({
@@ -29,6 +30,7 @@ const router = createRouter({
       component: DrinksView, // Link to the DrinksView component
     },
     { path: '/login', name: 'login', component: LoginView },
+    { path: '/signup', name: 'signup', component: Signup }, // Add the signup route
     {
       path: '/customers',
       name: 'customers',
