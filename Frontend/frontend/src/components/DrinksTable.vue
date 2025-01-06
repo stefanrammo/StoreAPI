@@ -1,22 +1,23 @@
 <template>
-    <table class="table table-striped">
-        <thead class="table-dark">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark text-center">
             <tr>
                 <th>Name</th>
                 <th>Price</th>
                 <th>Description</th>
                 <th>Expiration Date</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="item in items" :key="item.id">
                 <td>{{ item.name }}</td>
-                <td>{{ item.price }}</td>
+                <td class="text-center">{{ item.price }}</td>
                 <td>{{ item.description || 'N/A' }}</td>
-                <td>{{ item.expiration_date || 'N/A' }}</td>
+                <td class="text-end">{{ item.expiration_date || 'N/A' }}</td>
                 <td>
-                    <button @click="$emit('delete-item', item.id)">Delete</button>
-                    <button @click="$emit('edit-item', item)">Edit</button> <!-- Add Edit button -->
+                    <button class="btn btn-danger btn-sm me-1" @click="$emit('delete-item', item.id)">Delete</button>
+                    <button class="btn btn-primary btn-sm" @click="$emit('edit-item', item)">Edit</button> <!-- Add Edit button -->
                 </td>
             </tr>
         </tbody>
@@ -31,4 +32,6 @@
     }
   }
   </script>
+
+
   

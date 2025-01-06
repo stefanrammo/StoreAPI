@@ -5,6 +5,7 @@
         <li><router-link to="/">Home</router-link></li>
         <li><router-link to="/drinks">Drinks</router-link></li>
         <li><router-link to="/customers">Customers</router-link></li>
+        <li><router-link to="/orders">Orders</router-link></li>
         <li><router-link to="/about">About</router-link></li>
   
         <!-- Conditionally show logout if the user is logged in -->
@@ -49,6 +50,12 @@
     background-color: #333;
     color: white;
     padding: 1em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
   
   ul {
