@@ -3,34 +3,40 @@
       <DrinksTable :items="allDrinks" @delete-item="deleteItem" @edit-item="editItem" />
   
       <!-- Add Drink Button -->
-      <button @click="showAddForm = true">Add Drink</button>
+      <button v-if="!showAddForm" @click="showAddForm = true" class="btn btn-primary btn-sm">Add Drink</button>
   
       <!-- Add Drink Form: Only show if showAddForm is true -->
       <div v-if="showAddForm" class="edit-form">
         <h2>Add New Drink</h2>
         <form @submit.prevent="addItem">
-          <div>
-            <label for="name">Name:</label>
-            <input type="text" v-model="newDrink.name" required />
+          <div class="row col-6">
+            <div class="mb-1">
+              <label class="col-4" for="name">Name:</label>
+              <input class="col-8" type="text" v-model="newDrink.name" required />
+            </div>
+            <div class="mb-1">
+              <label class="col-4" for="price">Price:</label>
+              <input class="col-8" type="number" v-model="newDrink.price" required />
+            </div>
+            <div class="mb-1">
+              <label class="col-4" for="description">Description:</label>
+              <input class="col-8" type="text" v-model="newDrink.description" />
+            </div>
+            <div class="mb-1">
+              <label class="col-4" for="order_id">Order ID:</label>
+              <input class="col-8" type="number" v-model="newDrink.order_id" />
+            </div>
+            <div class="mb-1">
+              <label class="col-4" for="expiration_date">Exp. Date:</label>
+              <input class="col-8" type="date" v-model="newDrink.expiration_date" />
+            </div>
+            <div class="d-flex justify-content-end">
+              <div class="mb-1 justify-content-end">
+                <button class="me-1 btn btn-info btn-sm" type="button" @click="showAddForm = false">Cancel</button>
+                <button class="btn btn-primary btn-sm" type="submit">Add Drink</button>
+              </div>
+            </div>
           </div>
-          <div>
-            <label for="price">Price:</label>
-            <input type="number" v-model="newDrink.price" required />
-          </div>
-          <div>
-            <label for="description">Description:</label>
-            <input type="text" v-model="newDrink.description" />
-          </div>
-          <div>
-            <label for="order_id">Order ID:</label>
-            <input type="number" v-model="newDrink.order_id" />
-          </div>
-          <div>
-            <label for="expiration_date">Expiration Date:</label>
-            <input type="date" v-model="newDrink.expiration_date" />
-          </div>
-          <button type="submit">Add Drink</button>
-          <button type="button" @click="showAddForm = false">Cancel</button>
         </form>
       </div>
     </main>

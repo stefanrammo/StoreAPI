@@ -56,6 +56,7 @@
     width: 100%;
     z-index: 100;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem;
   }
   
   ul {
