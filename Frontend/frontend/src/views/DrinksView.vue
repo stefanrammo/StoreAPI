@@ -2,68 +2,70 @@
   <main class="container col-12 col-sm-7">
     <!-- Sorting Options -->
     <div class="row d-flex align-items-center mb-2">
-  <!-- Add Drink Button -->
-    <div class="col-auto">
-      <button v-if="!showAddForm" @click="showAddForm = true" class="btn btn-primary btn-sm">Add Drink</button>
-    </div>
-    <!-- Sorting Options -->
-    <div class="col-auto ms-auto">
-      <div class="sorting-options">
-        <label for="sortColumn" class="form-label me-2">Sort By:</label>
-        <select id="sortColumn" v-model="sortOption" class="form-select form-select-sm d-inline-block w-auto">
-          <option value="name:asc">Name (A-Z)</option>
-          <option value="name:desc">Name (Z-A)</option>
-          <option value="price:asc">Price (Ascending)</option>
-          <option value="price:desc">Price (Descending)</option>
-          <option value="expiration_date:asc">Expiration Date (Ascending)</option>
-          <option value="expiration_date:desc">Expiration Date (Descending)</option>
-        </select>
+      <!-- Add Drink Button -->
+      <div class="col-auto">
+        <button v-if="!showAddForm && isAdmin" @click="showAddForm = true" class="btn btn-primary btn-sm">Add Drink</button>
+      </div>
+      <!-- Sorting Options -->
+      <div class="col-auto ms-auto">
+        <div class="sorting-options">
+          <label for="sortColumn" class="form-label me-2">Sort By:</label>
+          <select id="sortColumn" v-model="sortOption" class="form-select form-select-sm d-inline-block w-auto">
+            <option value="name:asc">Name (A-Z)</option>
+            <option value="name:desc">Name (Z-A)</option>
+            <option value="price:asc">Price (Ascending)</option>
+            <option value="price:desc">Price (Descending)</option>
+            <option value="expiration_date:asc">Expiration Date (Ascending)</option>
+            <option value="expiration_date:desc">Expiration Date (Descending)</option>
+          </select>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Add Drink Form -->
-  <div v-if="showAddForm" class="edit-form container">
-    <h2>Add New Drink</h2>
-    <form @submit.prevent="addItem">
-      <div class="row col-12 col-sm-6 mb-2">
-        <div class="mb-1">
-          <label class="col-8" for="name">Name:</label>
-          <input class="col-12" type="text" v-model="newDrink.name" required />
-        </div>
-        <div class="mb-1">
-          <label class="col-8" for="price">Price:</label>
-          <input class="col-12" type="number" v-model="newDrink.price" required />
-        </div>
-        <div class="mb-1">
-          <label class="col-8" for="description">Description:</label>
-          <input class="col-12" type="text" v-model="newDrink.description" />
-        </div>
-        <div class="mb-1">
-          <label class="col-8" for="order_id">Order ID:</label>
-          <input class="col-12" type="number" v-model="newDrink.order_id" />
-        </div>
-        <div class="mb-1">
-          <label class="col-8" for="expiration_date">Exp. Date:</label>
-          <input class="col-12" type="date" v-model="newDrink.expiration_date" />
-        </div>
-        <div class="d-flex justify-content-end">
-          <div class="mb-1 justify-content-end">
-            <button class="me-1 btn btn-info btn-sm" type="button" @click="showAddForm = false">Cancel</button>
-            <button class="btn btn-primary btn-sm" type="submit">Add Drink</button>
+    <!-- Add Drink Form -->
+    <div v-if="showAddForm && isAdmin" class="edit-form container">
+      <h2>Add New Drink</h2>
+      <form @submit.prevent="addItem">
+        <div class="row col-12 col-sm-6 mb-2">
+          <div class="mb-1">
+            <label class="col-8" for="name">Name:</label>
+            <input class="col-12" type="text" v-model="newDrink.name" required />
+          </div>
+          <div class="mb-1">
+            <label class="col-8" for="price">Price:</label>
+            <input class="col-12" type="number" v-model="newDrink.price" required />
+          </div>
+          <div class="mb-1">
+            <label class="col-8" for="description">Description:</label>
+            <input class="col-12" type="text" v-model="newDrink.description" />
+          </div>
+          <div class="mb-1">
+            <label class="col-8" for="order_id">Order ID:</label>
+            <input class="col-12" type="number" v-model="newDrink.order_id" />
+          </div>
+          <div class="mb-1">
+            <label class="col-8" for="expiration_date">Exp. Date:</label>
+            <input class="col-12" type="date" v-model="newDrink.expiration_date" />
+          </div>
+          <div class="d-flex justify-content-end">
+            <div class="mb-1 justify-content-end">
+              <button class="me-1 btn btn-info btn-sm" type="button" @click="showAddForm = false">Cancel</button>
+              <button class="btn btn-primary btn-sm" type="submit">Add Drink</button>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
-  </div>
+      </form>
+    </div>
 
-    <DrinksTable :items="sortedDrinks" @delete-item="deleteItem" @edit-item="editItem" />
-
+    <!-- Drinks Table -->
+    <DrinksTable :items="sortedDrinks" :isAdmin="isAdmin" @delete-item="deleteItem" @edit-item="editItem" />
   </main>
 </template>
 
 <script>
 import DrinksTable from '../components/DrinksTable.vue';
+import jwt_decode from 'jwt-decode';
+
 export default {
   components: { DrinksTable },
   data() {
@@ -71,39 +73,45 @@ export default {
       allDrinks: [],
       sortOption: 'name:asc',
       editingDrink: null,
-      showAddForm: false,  // State to toggle the "Add Drink" form
+      showAddForm: false,
       newDrink: {
         name: '',
         price: '',
         description: '',
-        order_id: null, // Add order_id here
-        expiration_date: null, // Add expiration_date here
-      }, // For new drink data
+        order_id: null,
+        expiration_date: null,
+      },
+      isAdmin: false, // Track if the user is an admin
     };
   },
   computed: {
-  // Extract the column part from the sortOption
-  sortColumn() {
-    return this.sortOption.split(':')[0];
+    sortColumn() {
+      return this.sortOption.split(':')[0];
+    },
+    sortOrder() {
+      return this.sortOption.split(':')[1];
+    },
+    sortedDrinks() {
+      return [...this.allDrinks].sort((a, b) => {
+        let result = 0;
+        if (this.sortColumn === 'price') {
+          result = a[this.sortColumn] - b[this.sortColumn];
+        } else {
+          result = a[this.sortColumn]?.localeCompare(b[this.sortColumn] || '');
+        }
+        return this.sortOrder === 'asc' ? result : -result;
+      });
+    },
   },
-  // Extract the order part from the sortOption
-  sortOrder() {
-    return this.sortOption.split(':')[1];
-  },
-  // Sort the drinks based on the selected column and order
-  sortedDrinks() {
-    return [...this.allDrinks].sort((a, b) => {
-      let result = 0;
-      if (this.sortColumn === 'price') {
-        result = a[this.sortColumn] - b[this.sortColumn];
-      } else {
-        result = a[this.sortColumn]?.localeCompare(b[this.sortColumn] || '');
-      }
-      return this.sortOrder === 'asc' ? result : -result;
-    });
-  },
-},
   async created() {
+    // Check if the user is an admin by decoding the JWT token
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = jwt_decode(token);
+      this.isAdmin = decoded?.role === 'admin';  // Check if role is admin
+    }
+
+    // Fetch drinks from the server
     const response = await fetch('http://localhost:8080/drinks');
     const data = await response.json();
     this.allDrinks = data;
@@ -111,8 +119,14 @@ export default {
   methods: {
     async deleteItem(drinkId) {
       try {
+        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
         const response = await fetch(`http://localhost:8080/drinks/${drinkId}`, {
-          method: 'DELETE'
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,  // Pass the token in the Authorization header
+          },
         });
 
         if (response.ok) {
@@ -131,9 +145,14 @@ export default {
 
     async updateItem() {
       try {
+        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
         const response = await fetch(`http://localhost:8080/drinks/${this.editingDrink.id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,  // Pass the token in the Authorization header
+          },
           body: JSON.stringify(this.editingDrink),
         });
 
@@ -154,6 +173,8 @@ export default {
 
     async addItem() {
       try {
+        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
         const drinkPayload = {
           name: this.newDrink.name.trim(),
           price: Number(this.newDrink.price),
@@ -164,7 +185,10 @@ export default {
 
         const response = await fetch('http://localhost:8080/drinks', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,  // Pass the token in the Authorization header
+          },
           body: JSON.stringify(drinkPayload),
         });
 

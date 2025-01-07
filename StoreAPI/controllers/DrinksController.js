@@ -1,14 +1,13 @@
-const {db} = require('../db');
+const { db } = require('../db');
 const Utils = require('./utils');
-
 
 exports.getAll = async (req, res) => {
     try {
         const drinks = await db.drinks.findAll(); // Fetch data from the database
         res.send(drinks.map(({ id, name, price, description, expiration_date }) => ({
             id, name, price, description, expiration_date
-          })));
-              } catch (error) {
+        })));
+    } catch (error) {
         console.error('Error fetching drinks:', error);
         res.status(500).send({ error: 'Internal Server Error' });
     }
@@ -27,17 +26,20 @@ exports.getById = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-    
+    // Ensure the user is an admin
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).send({ error: 'Only admins can create drinks' });
+    }
+
     console.log('Request Body:', req.body); // Log the incoming body
 
     const { name, price, description } = req.body;
     console.log('Name:', name, 'Price:', price, 'Description:', description); // Log individual fields
 
-    
     if (!name || name.trim() === "" || price == null || description == null || description.trim() === "") {
         return res.status(400).send({ error: 'Missing required fields' });
     }
-    
+
     // Check if a drink with the same name already exists in the database
     const existingDrink = await db.drinks.findOne({
         where: {
@@ -62,10 +64,12 @@ exports.create = async (req, res) => {
     res.status(201).json({ id: createdDrink.id });
 };
 
-
-
-
 exports.deleteById = async (req, res) => {
+    // Ensure the user is an admin
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).send({ error: 'Only admins can delete drinks' });
+    }
+
     try {
         const drink = await findDrinkById(req); // Ensure you're passing `req` here, not `req.params.id`
         if (!drink) {
@@ -78,12 +82,16 @@ exports.deleteById = async (req, res) => {
     }
 };
 
-
 exports.editById = async (req, res) => {
+    // Ensure the user is an admin
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).send({ error: 'Only admins can edit drinks' });
+    }
+
     try {
         // Find the drink by ID
         const drink = await findDrinkById(req);
-        
+
         if (!drink) {
             return res.status(404).send({ error: "Drink not found" });
         }
@@ -104,7 +112,7 @@ exports.editById = async (req, res) => {
     }
 };
 
-
+// Helper function to find drink by ID
 const findDrinkById = async (req) => {
     const idNumber = parseInt(req.params.id, 10); // Ensure parsing the id as an integer
     if (isNaN(idNumber)) {

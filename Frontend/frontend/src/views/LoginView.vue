@@ -15,11 +15,11 @@
             <p class="ps-1 pe-1 text-center">Don't have an account? <router-link to="/signup">Sign Up</router-link></p>
         </div>
     </div>
-
 </template>
 
 <script>
 import axios from 'axios';
+import jwt_decode from 'jwt-decode'; // Correct import
 
 export default {
     data() {
@@ -41,7 +41,16 @@ export default {
                 .then(response => {
                     // On success, store the token in localStorage
                     console.log('Login successful', response);
-                    localStorage.setItem('token', response.data.token);  // Store the token received in response
+                    const token = response.data.token;
+                    localStorage.setItem('token', token);  // Store the token received in response
+                    
+                    // Decode token to get user info
+                    const decodedToken = jwt_decode(token);
+                    console.log(decodedToken);  // Check the decoded token
+
+                    // Optionally, store user role or id in localStorage if needed
+                    localStorage.setItem('role', decodedToken.role);
+                    localStorage.setItem('userId', decodedToken.id);
                     
                     // Redirect to the customers view
                     this.$router.push({ name: 'customers' });

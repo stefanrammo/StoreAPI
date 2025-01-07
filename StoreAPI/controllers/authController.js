@@ -13,6 +13,17 @@ exports.login = async (req, res) => {
     }
 
     try {
+        // Check if email belongs to the admin (id=1)
+        if (email === "admin@example.com") {
+            const adminPassword = process.env.ADMIN_PASSWORD; // Use an environment variable for the admin password
+            if (password !== adminPassword) {
+                return res.status(401).send({ error: 'Invalid email or password' });
+            }
+
+            const token = jwt.sign({ id: 1, role: 'admin' }, process.env.SECRET_KEY, { expiresIn: '1h' });
+            return res.status(200).send({ message: 'Admin login successful', token });
+        }
+
         const customer = await db.customers.findOne({ where: { email } });
 
         if (!customer) {
@@ -24,7 +35,7 @@ exports.login = async (req, res) => {
             return res.status(401).send({ error: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ id: customer.id, email: customer.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ id: customer.id, email: customer.email, role: 'customer' }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
         res.status(200).send({ message: 'Login successful', token });
     } catch (error) {
@@ -32,6 +43,8 @@ exports.login = async (req, res) => {
         res.status(500).send({ error: 'Internal Server Error' });
     }
 };
+
+
 
 // Create user method
 exports.signup = async (req, res) => {
