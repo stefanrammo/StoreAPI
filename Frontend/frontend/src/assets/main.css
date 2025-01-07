@@ -23,7 +23,7 @@ a,
 
 @media (min-width: 1024px) {
   body {
-    display: flex;
+    display: block;
     place-items: top;
     margin-top: 6rem;
   }
@@ -35,7 +35,7 @@ a,
 
 @media (max-width: 576px) {
   body {
-    display: flex;
+    display: block;
     place-items: top;
     margin-top: 5rem;
   }

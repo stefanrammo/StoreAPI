@@ -1,19 +1,15 @@
 <template>
-  <main>
+  <main class="container col-12 col-sm-7">
     <!-- Sorting Options -->
     <div class="sorting-options mb-3">
       <label for="sortColumn" class="form-label">Sort By:</label>
-      <select id="sortColumn" v-model="sortColumn" class="form-select form-select-sm">
-        <option value="name">Name</option>
-        <option value="price">Price</option>
-        <option value="description">Description</option>
-        <option value="expiration_date">Expiration Date</option>
-      </select>
-
-      <label for="sortOrder" class="form-label ms-3">Order:</label>
-      <select id="sortOrder" v-model="sortOrder" class="form-select form-select-sm">
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
+      <select id="sortColumn" v-model="sortOption" class="form-select form-select-sm">
+        <option value="name:asc">Name (A-Z)</option>
+        <option value="name:desc">Name (Z-A)</option>
+        <option value="price:asc">Price (Ascending)</option>
+        <option value="price:desc">Price (Descending)</option>
+        <option value="expiration_date:asc">Expiration Date (Ascending)</option>
+        <option value="expiration_date:desc">Expiration Date (Descending)</option>
       </select>
     </div>
 
@@ -26,7 +22,7 @@
     <div v-if="showAddForm" class="edit-form container">
       <h2>Add New Drink</h2>
       <form @submit.prevent="addItem">
-        <div class="row col-6">
+        <div class="row col-9 col-sm-6">
           <div class="mb-1">
             <label class="col-4" for="name">Name:</label>
             <input class="col-8" type="text" v-model="newDrink.name" required />
@@ -66,8 +62,7 @@ export default {
   data() {
     return {
       allDrinks: [],
-      sortColumn: 'name', // Default sorting column
-      sortOrder: 'asc', // Default sorting order
+      sortOption: 'name:asc',
       editingDrink: null,
       showAddForm: false,  // State to toggle the "Add Drink" form
       newDrink: {
@@ -80,18 +75,27 @@ export default {
     };
   },
   computed: {
-    sortedDrinks() {
-      return [...this.allDrinks].sort((a, b) => {
-        let result = 0;
-        if (this.sortColumn === 'price') {
-          result = a[this.sortColumn] - b[this.sortColumn];
-        } else {
-          result = a[this.sortColumn]?.localeCompare(b[this.sortColumn] || '');
-        }
-        return this.sortOrder === 'asc' ? result : -result;
-      });
-    },
+  // Extract the column part from the sortOption
+  sortColumn() {
+    return this.sortOption.split(':')[0];
   },
+  // Extract the order part from the sortOption
+  sortOrder() {
+    return this.sortOption.split(':')[1];
+  },
+  // Sort the drinks based on the selected column and order
+  sortedDrinks() {
+    return [...this.allDrinks].sort((a, b) => {
+      let result = 0;
+      if (this.sortColumn === 'price') {
+        result = a[this.sortColumn] - b[this.sortColumn];
+      } else {
+        result = a[this.sortColumn]?.localeCompare(b[this.sortColumn] || '');
+      }
+      return this.sortOrder === 'asc' ? result : -result;
+    });
+  },
+},
   async created() {
     const response = await fetch('http://localhost:8080/drinks');
     const data = await response.json();

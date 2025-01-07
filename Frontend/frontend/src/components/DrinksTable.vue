@@ -15,9 +15,9 @@
                 <td class="text-center">{{ item.price }}</td>
                 <td>{{ item.description || 'N/A' }}</td>
                 <td class="text-end">{{ item.expiration_date || 'N/A' }}</td>
-                <td>
-                    <button class="btn btn-danger btn-sm me-1" @click="$emit('delete-item', item.id)">Delete</button>
-                    <button class="btn btn-primary btn-sm" @click="$emit('edit-item', item)">Edit</button> <!-- Add Edit button -->
+                <td class="row d-flex justify-content-center">
+                    <button class="btn btn-danger btn-sm col-sm-5 m-1" @click="$emit('delete-item', item.id)">Delete</button>
+                    <button class="btn btn-primary btn-sm col-sm-5 m-1" @click="$emit('edit-item', item)">Edit</button> <!-- Add Edit button -->
                 </td>
             </tr>
         </tbody>
