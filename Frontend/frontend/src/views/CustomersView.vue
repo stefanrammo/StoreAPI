@@ -1,5 +1,5 @@
 <template>
-    <main class="customers">
+    <main class="container col-12 col-sm-9">
       <h2>Customers</h2>
   
       <!-- Error Message -->
@@ -22,9 +22,9 @@
             <td>{{ customer.name }}</td>
             <td>{{ customer.email }}</td>
             <td>{{ customer.age }}</td>
-            <td>
-              <button @click="editCustomer(customer)">Edit</button>
-              <button @click="deleteCustomer(customer.id)">Delete</button>
+            <td class="d-flex justify-content-center">
+              <button @click="editCustomer(customer)" class="btn btn-primary btn-sm w-25">Edit</button>
+              <button @click="deleteCustomer(customer.id)" class="btn btn-danger btn-sm w-25">Delete</button>
             </td>
           </tr>
         </tbody>
