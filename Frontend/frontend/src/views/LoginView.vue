@@ -1,20 +1,18 @@
 <template>
-    <div class="login-form">
-        <h2>Login</h2>
-        <form @submit.prevent="login">
+    <div class="card p-2">
+        <h2 class="card-header text-center">Login</h2>
+        <form @submit.prevent="login" class="card-body">
             <div>
-                <label for="email">Email:</label>
-                <input type="email" v-model="email" required />
+                <input type="email" v-model="email" class="w-100 mb-1" placeholder="Email" required />
             </div>
             <div>
-                <label for="password">Password:</label>
-                <input type="password" v-model="password" required />
+                <input type="password" v-model="password" class="w-100 mb-1" placeholder="Password" required />
             </div>
-            <button type="submit">Login</button>
+            <button type="submit" class="w-100 btn btn-primary">Login</button>
             <p v-if="error" class="error">{{ error }}</p>
         </form>
+        <p>Don't have an account? <router-link to="/signup">Sign Up</router-link></p>
     </div>
-    <p>Don't have an account? <router-link to="/signup">Sign Up</router-link></p>
 
 </template>
 

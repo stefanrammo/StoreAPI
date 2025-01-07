@@ -1,28 +1,24 @@
 <template>
-    <div class="signup-form">
-        <h2>Sign Up</h2>
-        <form @submit.prevent="signup">
+    <div class="card">
+        <h2 class="card-header text-center">Sign Up</h2>
+        <form @submit.prevent="signup" class="card-body">
             <div>
-                <label for="name">Name:</label>
-                <input type="text" v-model="name" required />
+                <input type="text" v-model="name" class="w-100 mb-1" placeholder="Name" required />
             </div>
             <div>
-                <label for="email">Email:</label>
-                <input type="email" v-model="email" required />
+                <input type="email" v-model="email"  class="w-100 mb-1" placeholder="Email" required />
             </div>
             <div>
-                <label for="password">Password:</label>
-                <input type="password" v-model="password" required />
+                <input type="password" v-model="password" class="w-100 mb-1" placeholder="Password" required />
             </div>
             <div>
-                <label for="age">Age:</label>
-                <input type="number" v-model="age" required />
+                <input type="number" v-model="age" class="w-100 mb-1" placeholder="Age" required />
             </div>
-            <button type="submit">Sign Up</button>
+            <button type="submit" class="w-100 btn btn-primary">Sign Up</button>
             <p v-if="error" class="error">{{ error }}</p>
         </form>
+        <p class="ps-1 pe-1">Already have an account? <router-link to="/login">Login</router-link></p>
     </div>
-    <p>Already have an account? <router-link to="/login">Login</router-link></p>
 
 </template>
 

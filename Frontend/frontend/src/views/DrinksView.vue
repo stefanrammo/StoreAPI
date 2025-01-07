@@ -1,12 +1,13 @@
 <template>
     <main>
+
       <DrinksTable :items="allDrinks" @delete-item="deleteItem" @edit-item="editItem" />
   
       <!-- Add Drink Button -->
       <button v-if="!showAddForm" @click="showAddForm = true" class="btn btn-primary btn-sm">Add Drink</button>
   
       <!-- Add Drink Form: Only show if showAddForm is true -->
-      <div v-if="showAddForm" class="edit-form">
+      <div v-if="showAddForm" class="edit-form container">
         <h2>Add New Drink</h2>
         <form @submit.prevent="addItem">
           <div class="row col-6">
