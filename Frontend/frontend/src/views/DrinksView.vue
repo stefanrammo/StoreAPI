@@ -1,57 +1,64 @@
 <template>
   <main class="container col-12 col-sm-7">
     <!-- Sorting Options -->
-    <div class="sorting-options mb-3">
-      <label for="sortColumn" class="form-label">Sort By:</label>
-      <select id="sortColumn" v-model="sortOption" class="form-select form-select-sm">
-        <option value="name:asc">Name (A-Z)</option>
-        <option value="name:desc">Name (Z-A)</option>
-        <option value="price:asc">Price (Ascending)</option>
-        <option value="price:desc">Price (Descending)</option>
-        <option value="expiration_date:asc">Expiration Date (Ascending)</option>
-        <option value="expiration_date:desc">Expiration Date (Descending)</option>
-      </select>
+    <div class="row d-flex align-items-center mb-2">
+  <!-- Add Drink Button -->
+    <div class="col-auto">
+      <button v-if="!showAddForm" @click="showAddForm = true" class="btn btn-primary btn-sm">Add Drink</button>
     </div>
+    <!-- Sorting Options -->
+    <div class="col-auto ms-auto">
+      <div class="sorting-options">
+        <label for="sortColumn" class="form-label me-2">Sort By:</label>
+        <select id="sortColumn" v-model="sortOption" class="form-select form-select-sm d-inline-block w-auto">
+          <option value="name:asc">Name (A-Z)</option>
+          <option value="name:desc">Name (Z-A)</option>
+          <option value="price:asc">Price (Ascending)</option>
+          <option value="price:desc">Price (Descending)</option>
+          <option value="expiration_date:asc">Expiration Date (Ascending)</option>
+          <option value="expiration_date:desc">Expiration Date (Descending)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Drink Form -->
+  <div v-if="showAddForm" class="edit-form container">
+    <h2>Add New Drink</h2>
+    <form @submit.prevent="addItem">
+      <div class="row col-12 col-sm-6 mb-2">
+        <div class="mb-1">
+          <label class="col-8" for="name">Name:</label>
+          <input class="col-12" type="text" v-model="newDrink.name" required />
+        </div>
+        <div class="mb-1">
+          <label class="col-8" for="price">Price:</label>
+          <input class="col-12" type="number" v-model="newDrink.price" required />
+        </div>
+        <div class="mb-1">
+          <label class="col-8" for="description">Description:</label>
+          <input class="col-12" type="text" v-model="newDrink.description" />
+        </div>
+        <div class="mb-1">
+          <label class="col-8" for="order_id">Order ID:</label>
+          <input class="col-12" type="number" v-model="newDrink.order_id" />
+        </div>
+        <div class="mb-1">
+          <label class="col-8" for="expiration_date">Exp. Date:</label>
+          <input class="col-12" type="date" v-model="newDrink.expiration_date" />
+        </div>
+        <div class="d-flex justify-content-end">
+          <div class="mb-1 justify-content-end">
+            <button class="me-1 btn btn-info btn-sm" type="button" @click="showAddForm = false">Cancel</button>
+            <button class="btn btn-primary btn-sm" type="submit">Add Drink</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 
     <DrinksTable :items="sortedDrinks" @delete-item="deleteItem" @edit-item="editItem" />
 
-    <!-- Add Drink Button -->
-    <button v-if="!showAddForm" @click="showAddForm = true" class="btn btn-primary btn-sm">Add Drink</button>
-
-    <!-- Add Drink Form: Only show if showAddForm is true -->
-    <div v-if="showAddForm" class="edit-form container">
-      <h2>Add New Drink</h2>
-      <form @submit.prevent="addItem">
-        <div class="row col-9 col-sm-6">
-          <div class="mb-1">
-            <label class="col-4" for="name">Name:</label>
-            <input class="col-8" type="text" v-model="newDrink.name" required />
-          </div>
-          <div class="mb-1">
-            <label class="col-4" for="price">Price:</label>
-            <input class="col-8" type="number" v-model="newDrink.price" required />
-          </div>
-          <div class="mb-1">
-            <label class="col-4" for="description">Description:</label>
-            <input class="col-8" type="text" v-model="newDrink.description" />
-          </div>
-          <div class="mb-1">
-            <label class="col-4" for="order_id">Order ID:</label>
-            <input class="col-8" type="number" v-model="newDrink.order_id" />
-          </div>
-          <div class="mb-1">
-            <label class="col-4" for="expiration_date">Exp. Date:</label>
-            <input class="col-8" type="date" v-model="newDrink.expiration_date" />
-          </div>
-          <div class="d-flex justify-content-end">
-            <div class="mb-1 justify-content-end">
-              <button class="me-1 btn btn-info btn-sm" type="button" @click="showAddForm = false">Cancel</button>
-              <button class="btn btn-primary btn-sm" type="submit">Add Drink</button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
   </main>
 </template>
 
