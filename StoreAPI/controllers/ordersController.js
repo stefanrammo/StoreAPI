@@ -2,27 +2,33 @@ const { db } = require('../db');
 
 // Get all orders
 exports.getAll = async (req, res) => {
-    try {
-        const orders = await db.orders.findAll({
-            include: [
-                {
-                    model: db.customers,
-                    as: "customer",
-                    attributes: ["id", "name", "email"],
-                },
-                {
-                    model: db.drinks,
-                    as: "drinks",
-                    attributes: ["id", "name", "price"],
-                },
-            ],
-        });
-        res.status(200).json(orders);
-    } catch (error) {
-        console.error('Error fetching orders:', error);
-        res.status(500).send({ error: 'Internal Server Error' });
-    }
+  try {
+    const { customer_id } = req.query; // Extract customer_id from query params
+    const whereClause = customer_id ? { customer_id } : {}; // If customer_id exists, filter orders by it
+
+    const orders = await db.orders.findAll({
+      where: whereClause,
+      include: [
+        {
+          model: db.customers,
+          as: "customer",
+          attributes: ["id", "name", "email"],
+        },
+        {
+          model: db.drinks,
+          as: "drinks",
+          attributes: ["id", "name", "price"],
+        },
+      ],
+    });
+
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
 };
+
 
 // Get order by ID
 exports.getById = async (req, res) => {
