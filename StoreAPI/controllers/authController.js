@@ -7,42 +7,56 @@ const { db } = require('../db'); // assuming db is your database setup
 // Login method
 exports.login = async (req, res) => {
     const { email, password } = req.body;
-
+  
     if (!email || !password) {
-        return res.status(400).send({ error: 'Email and password are required' });
+      return res.status(400).send({ error: "Email and password are required" });
     }
-
+  
     try {
-        // Check if email belongs to the admin (id=1)
-        if (email === "admin@example.com") {
-            const adminPassword = process.env.ADMIN_PASSWORD; // Use an environment variable for the admin password
-            if (password !== adminPassword) {
-                return res.status(401).send({ error: 'Invalid email or password' });
-            }
-
-            const token = jwt.sign({ id: 1, role: 'admin' }, process.env.SECRET_KEY, { expiresIn: '1h' });
-            return res.status(200).send({ message: 'Admin login successful', token });
+      // Check if email matches admin credentials
+      if (email === "admin@example.com") {
+        const adminPassword = process.env.ADMIN_PASSWORD;
+        if (!adminPassword) {
+          console.error("ADMIN_PASSWORD is not set in the environment variables.");
+          return res.status(500).send({ error: "Server misconfiguration" });
         }
-
-        const customer = await db.customers.findOne({ where: { email } });
-
-        if (!customer) {
-            return res.status(401).send({ error: 'Invalid email or password' });
+  
+        if (password !== adminPassword) {
+          return res.status(401).send({ error: "Invalid email or password" });
         }
-
-        const isPasswordValid = await bcrypt.compare(password, customer.password);
-        if (!isPasswordValid) {
-            return res.status(401).send({ error: 'Invalid email or password' });
-        }
-
-        const token = jwt.sign({ id: customer.id, email: customer.email, role: 'customer' }, process.env.SECRET_KEY, { expiresIn: '1h' });
-
-        res.status(200).send({ message: 'Login successful', token });
+  
+        const token = jwt.sign(
+          { id: 1, role: "admin" }, // Admin role
+          process.env.SECRET_KEY,
+          { expiresIn: "1h" }
+        );
+        return res.status(200).send({ message: "Admin login successful", token });
+      }
+  
+      // If not admin, check if the email matches a customer in the database
+      const customer = await db.customers.findOne({ where: { email } });
+      if (!customer) {
+        return res.status(401).send({ error: "Invalid email or password" });
+      }
+  
+      // Verify the customer's password
+      const isPasswordValid = await bcrypt.compare(password, customer.password);
+      if (!isPasswordValid) {
+        return res.status(401).send({ error: "Invalid email or password" });
+      }
+  
+      const token = jwt.sign(
+        { id: customer.id, email: customer.email, role: "customer" },
+        process.env.SECRET_KEY,
+        { expiresIn: "1h" }
+      );
+  
+      res.status(200).send({ message: "Login successful", token });
     } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).send({ error: 'Internal Server Error' });
+      console.error("Error during login:", error);
+      res.status(500).send({ error: "Internal Server Error" });
     }
-};
+  };
 
 
 
