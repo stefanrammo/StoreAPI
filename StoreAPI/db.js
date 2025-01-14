@@ -28,7 +28,6 @@ db.sequelize = sequelize;
 db.drinks = require("./models/Drink")(sequelize, DataTypes);
 db.customers = require("./models/Customer")(sequelize, DataTypes);
 db.orders = require("./models/Order")(sequelize, DataTypes);
-db.comments = require("./models/Comment")(sequelize, DataTypes);
 
 // Define Relationships
 
@@ -36,13 +35,6 @@ db.comments = require("./models/Comment")(sequelize, DataTypes);
 db.customers.hasMany(db.orders, { foreignKey: "customer_id", as: "orders" });
 db.orders.belongsTo(db.customers, { foreignKey: "customer_id", as: "customer" });
 
-// A Drink can have many Comments
-db.drinks.hasMany(db.comments, { foreignKey: "drink_id", as: "comments" });
-db.comments.belongsTo(db.drinks, { foreignKey: "drink_id", as: "drink" });
-
-// A Customer can have many Comments
-db.customers.hasMany(db.comments, { foreignKey: "customer_id", as: "comments" });
-db.comments.belongsTo(db.customers, { foreignKey: "customer_id", as: "customer" });
 
 // An Order can have many Drinks through Order_Drinks (many-to-many)
 db.orders.belongsToMany(db.drinks, {
