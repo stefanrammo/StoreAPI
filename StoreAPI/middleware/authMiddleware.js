@@ -23,4 +23,25 @@ const verifyAdmin = (req, res, next) => {
     }
 };
 
-module.exports = { verifyAdmin };
+const verifyCustomer = (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+
+    if (!token) {
+        return res.status(403).send({ error: 'No token provided' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        if (decoded.role !== 'customer' && decoded.role !== 'admin') {
+            return res.status(403).send({ error: 'Access denied' });
+        }
+
+        req.user = decoded;
+        next();
+    } catch (error) {
+        console.error('Error verifying token:', error);
+        res.status(401).send({ error: 'Invalid or expired token' });
+    }
+};
+
+module.exports = { verifyAdmin, verifyCustomer };

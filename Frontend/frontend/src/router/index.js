@@ -44,6 +44,11 @@ const router = createRouter({
         }
       }
     },
+    {
+      path: "/orders",
+      name: "OrdersView",
+      component: () => import("../views/OrdersView.vue"),
+    }
   ],
 });
 
