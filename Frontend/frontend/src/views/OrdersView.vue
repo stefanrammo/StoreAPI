@@ -50,7 +50,7 @@
       async fetchOrders() {
         try {
           const token = localStorage.getItem("token");
-          const response = await fetch("http://localhost:8080/orders", {
+          const response = await fetch("http://localhost:8080/api/orders", {
             headers: {
               Authorization: `Bearer ${token}`,
             },

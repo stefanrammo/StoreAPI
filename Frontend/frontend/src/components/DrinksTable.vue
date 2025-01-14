@@ -30,6 +30,13 @@
           >
             Edit
           </button>
+          <button 
+            v-if="!isAdmin" 
+            class="btn btn-success btn-sm col-sm-5 m-1" 
+            @click="$emit('add-to-order', item)"
+          >
+            Add to Order
+          </button>
         </td>
       </tr>
     </tbody>

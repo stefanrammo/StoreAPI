@@ -4,18 +4,20 @@ const ordersController = require('../controllers/ordersController');
 const { verifyCustomer } = require('../middleware/authMiddleware');
 
 // Get all orders (Admin only)
-router.get('/orders', ordersController.getAll);
+router.get('/', ordersController.getAll);
 
 // Get order by ID (Admin or owner)
-router.get('/orders/:id', verifyCustomer, ordersController.getById);
+router.get('/:id', verifyCustomer, ordersController.getById);
 
 // Create a new order (Customer only)
-router.post('/orders', verifyCustomer, ordersController.create);
+router.post('/', verifyCustomer, ordersController.create);
 
 // Edit an existing order (Admin or owner)
-router.put('/orders/:id', verifyCustomer, ordersController.editById);
+router.put('/:id', verifyCustomer, ordersController.editById);
 
 // Delete an order by ID (Admin only)
-router.delete('/orders/:id', verifyCustomer, ordersController.deleteById);
+router.delete('/:id', verifyCustomer, ordersController.deleteById);
 
-module.exports = router;
+module.exports = (app) => {
+    app.use('/api/orders', router); // Ensure all routes are prefixed with /api/orders
+};
