@@ -1,33 +1,40 @@
 const { db } = require('../db');
 
 // Get all orders
+// controllers/ordersController.js
+
 exports.getAll = async (req, res) => {
-  try {
-    const { customer_id } = req.query; // Extract customer_id from query params
-    const whereClause = customer_id ? { customer_id } : {}; // If customer_id exists, filter orders by it
-
-    const orders = await db.orders.findAll({
-      where: whereClause,
-      include: [
-        {
-          model: db.customers,
-          as: "customer",
-          attributes: ["id", "name", "email"],
-        },
-        {
-          model: db.drinks,
-          as: "drinks",
-          attributes: ["id", "name", "price"],
-        },
-      ],
-    });
-
-    res.status(200).json(orders);
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    res.status(500).send({ error: "Internal Server Error" });
-  }
-};
+    try {
+      const { role, id } = req.user; // Extract role and user ID from the token
+      let whereClause = {};
+  
+      if (role === "customer") {
+        whereClause.customer_id = id; // Customers can only fetch their own orders
+      }
+  
+      const orders = await db.orders.findAll({
+        where: whereClause,
+        include: [
+          {
+            model: db.customers,
+            as: "customer",
+            attributes: ["id", "name", "email"],
+          },
+          {
+            model: db.drinks,
+            as: "drinks",
+            attributes: ["id", "name", "price"],
+          },
+        ],
+      });
+  
+      res.status(200).json(orders);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      res.status(500).send({ error: "Internal Server Error" });
+    }
+  };
+  
 
 
 // Get order by ID
@@ -103,12 +110,20 @@ exports.editById = async (req, res) => {
 };
 
 // Delete an order
+// controllers/ordersController.js
+
 exports.deleteById = async (req, res) => {
     try {
         const order = await db.orders.findByPk(req.params.id);
 
         if (!order) {
             return res.status(404).send({ error: 'Order not found' });
+        }
+
+        const user = req.user; // Extracted from the middleware
+
+        if (user.role !== 'admin' && user.id !== order.customer_id) {
+            return res.status(403).send({ error: 'You do not have permission to delete this order.' });
         }
 
         await order.destroy();
@@ -118,3 +133,4 @@ exports.deleteById = async (req, res) => {
         res.status(500).send({ error: 'Internal Server Error' });
     }
 };
+

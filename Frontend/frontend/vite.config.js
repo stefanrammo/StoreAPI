@@ -15,4 +15,19 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  devServer: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        pathRewrite: { "^/api": "/api" },
+      },
+      "/drinks": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        pathRewrite: { "^/drinks": "/drinks" },
+      },
+      // Add more proxies as needed
+    },
+  },
 })
