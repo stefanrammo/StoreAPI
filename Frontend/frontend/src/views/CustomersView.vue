@@ -196,7 +196,6 @@ button {
 }
 
 .edit-form {
-  background-color: #f8f9fa;
   padding: 1rem;
   border-radius: 5px;
 }

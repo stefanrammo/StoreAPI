@@ -27,21 +27,37 @@
       <h2>Add New Drink</h2>
       <form @submit.prevent="addItem">
         <div class="row col-12 col-sm-6 mb-2">
-          <div class="mb-1">
-            <label for="name">Name:</label>
-            <input type="text" v-model="newDrink.name" required />
+          <div class="row d-flex mb-1">
+            <div class="col-4">
+              <label for="name">Name:</label>
+            </div>
+            <div class="col-8">
+              <input type="text" v-model="newDrink.name" required />
+            </div>
           </div>
-          <div class="mb-1">
-            <label for="price">Price:</label>
-            <input type="number" v-model="newDrink.price" required />
+          <div class="row d-flex mb-1">
+            <div class="col-4">
+              <label for="price">Price:</label>            
+            </div>
+            <div class="col-8">
+              <input type="number" v-model="newDrink.price" required />
+            </div>
           </div>
-          <div class="mb-1">
-            <label for="description">Description:</label>
-            <input type="text" v-model="newDrink.description" />
+          <div class="row d-flex mb-1">
+            <div class="col-4">
+              <label for="description">Description:</label>
+            </div>
+            <div class="col-8">
+              <input type="text" v-model="newDrink.description" />
+            </div>
           </div>
-          <div class="mb-1">
-            <label for="expiration_date">Exp. Date:</label>
-            <input type="date" v-model="newDrink.expiration_date" />
+          <div class="row d-flex mb-1">
+            <div class="col-4">
+              <label for="expiration_date">Exp. Date:</label>
+            </div>
+            <div class="col-8">
+              <input type="date" v-model="newDrink.expiration_date" />
+            </div>
           </div>
           <div class="d-flex justify-content-end">
             <button class="btn btn-info btn-sm me-1" type="button" @click="showAddForm = false">Cancel</button>
@@ -56,21 +72,37 @@
       <h2>Edit Drink</h2>
       <form @submit.prevent="updateItem">
         <div class="row col-12 col-sm-6 mb-2">
-          <div class="mb-1">
-            <label for="editName">Name:</label>
-            <input type="text" v-model="editingDrink.name" required />
+          <div class="row d-flex mb-1">
+            <div class="col-4">
+              <label for="editName">Name:</label>
+            </div>
+            <div class="col-8">
+              <input type="text" v-model="editingDrink.name" required />
+            </div>
           </div>
-          <div class="mb-1">
-            <label for="editPrice">Price:</label>
-            <input type="number" v-model="editingDrink.price" required />
+          <div class="row d-flex mb-1">
+            <div class="col-4">
+              <label for="editPrice">Price:</label>
+            </div>
+            <div class="col-8">
+              <input type="number" v-model="editingDrink.price" required />
+            </div>
           </div>
-          <div class="mb-1">
-            <label for="editDescription">Description:</label>
-            <input type="text" v-model="editingDrink.description" />
+          <div class="row d-flex mb-1">
+            <div class="col-4">
+              <label for="editDescription">Description:</label>
+            </div>
+            <div class="col-8">
+              <input type="text" v-model="editingDrink.description" />
+            </div>
           </div>
-          <div class="mb-1">
-            <label for="editExpiration">Exp. Date:</label>
-            <input type="date" v-model="editingDrink.expiration_date" />
+          <div class="row d-flex mb-1">
+            <div class="col-4">
+              <label for="editExpiration">Exp. Date:</label>
+            </div>
+            <div class="col-8">
+              <input type="date" v-model="editingDrink.expiration_date" />
+            </div>
           </div>
           <div class="d-flex justify-content-end">
             <button class="btn btn-info btn-sm me-1" type="button" @click="cancelEdit">Cancel</button>
@@ -79,6 +111,7 @@
         </div>
       </form>
     </div>
+
 
     <!-- Drinks Table -->
     <DrinksTable

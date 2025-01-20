@@ -379,10 +379,6 @@ export default {
   padding: 8px;
 }
 
-.orders-table th {
-  background-color: #f2f2f2;
-}
-
 .drink-list {
   list-style-type: none;
   padding: 0;
